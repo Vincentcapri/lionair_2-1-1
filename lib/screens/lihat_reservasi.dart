@@ -557,13 +557,15 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                 child: Column(
                                   children: [
                                     ElevatedButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          loading1 = true;
-                                        });
-                                        getReport(
-                                            destination.text, vidx.text, index);
-                                      },
+                                      onPressed: loading1
+                                          ? null
+                                          : () async {
+                                              setState(() {
+                                                loading1 = true;
+                                              });
+                                              getReport(destination.text,
+                                                  vidx.text, index);
+                                            },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.redAccent,
                                       ),
@@ -722,14 +724,15 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                                             .sentiment_neutral_outlined),
                                                     color: const Color.fromARGB(
                                                         255, 176, 176, 171),
-                                                    onPressed: () async {
-                                                      setState(() {
-                                                        loading2 = true;
-                                                      });
-
-                                                      getRating(
-                                                          vidx.text, index);
-                                                    },
+                                                    onPressed: loading2
+                                                        ? null
+                                                        : () async {
+                                                            setState(() {
+                                                              loading2 = true;
+                                                            });
+                                                            getRating(vidx.text,
+                                                                index);
+                                                          },
                                                   ),
                                                   const Text("Rate Us"),
                                                 ],

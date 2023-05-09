@@ -207,28 +207,32 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             style:
                                                 TextStyle(color: Colors.white)),
                                   ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    if (newpass.text != renewpass.text) {
-                                      StatusAlert.show(
-                                        context,
-                                        duration: const Duration(seconds: 1),
-                                        configuration: const IconConfiguration(
-                                            icon: Icons.error,
-                                            color: Colors.red),
-                                        title: "Password don't match",
-                                        subtitle: "Please check again!!",
-                                        backgroundColor: Colors.grey[300],
-                                      );
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else {
-                                      updatePass(newpass.text);
-                                    }
-                                  }),
+                                  onPressed: loading
+                                      ? null
+                                      : () async {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          if (newpass.text != renewpass.text) {
+                                            StatusAlert.show(
+                                              context,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              configuration:
+                                                  const IconConfiguration(
+                                                      icon: Icons.error,
+                                                      color: Colors.red),
+                                              title: "Password don't match",
+                                              subtitle: "Please check again!!",
+                                              backgroundColor: Colors.grey[300],
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          } else {
+                                            updatePass(newpass.text);
+                                          }
+                                        }),
                             ],
                           ),
                         ),

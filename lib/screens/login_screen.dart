@@ -434,16 +434,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: const Text('Submit',
                                     style: TextStyle(color: Colors.white)),
                               ),
-                              onPressed: () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                _cekUser(idpegawai.text, password.text);
-                                getData(destination.text, idpegawai.text);
-                                getReservation(
-                                    destination.text, idpegawai.text);
-                                // _showNotification();
-                              }),
+                              onPressed: loading
+                                  ? null
+                                  : () async {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      _cekUser(idpegawai.text, password.text);
+                                      getData(destination.text, idpegawai.text);
+                                      getReservation(
+                                          destination.text, idpegawai.text);
+                                      // _showNotification();
+                                    }),
                     ],
                   ),
                 ),

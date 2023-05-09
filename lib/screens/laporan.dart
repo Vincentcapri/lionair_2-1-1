@@ -589,12 +589,15 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.redAccent,
                                             ),
-                                            onPressed: () async {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              getIDFile(idreff.text, index);
-                                            },
+                                            onPressed: loading1
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading1 = true;
+                                                    });
+                                                    getIDFile(
+                                                        idreff.text, index);
+                                                  },
                                             child: loading1
                                                 ? const SizedBox(
                                                     height: 20,

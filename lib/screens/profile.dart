@@ -200,25 +200,27 @@ class _UserProfileState extends State<UserProfile> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   disabledColor: Colors.grey,
-                  onPressed: () {
-                    setState(() {
-                      loading = true;
-                    });
-                    Future.delayed(const Duration(seconds: 1), () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => UpdatePassword(
-                          userapi: userapi,
-                          passapi: passapi,
-                          data: data,
-                          data1: data1,
-                          data2: data2,
-                        ),
-                      ));
-                      setState(() {
-                        loading = false;
-                      });
-                    });
-                  },
+                  onPressed: loading
+                      ? null
+                      : () {
+                          setState(() {
+                            loading = true;
+                          });
+                          Future.delayed(const Duration(seconds: 1), () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => UpdatePassword(
+                                userapi: userapi,
+                                passapi: passapi,
+                                data: data,
+                                data1: data1,
+                                data2: data2,
+                              ),
+                            ));
+                            setState(() {
+                              loading = false;
+                            });
+                          });
+                        },
                   child: loading
                       ? const SizedBox(
                           height: 28,

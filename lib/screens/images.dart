@@ -351,12 +351,14 @@ class _Lihatgambarstate extends State<Lihatgambar> {
                                 child: loading1
                                     ? const CircularProgressIndicator()
                                     : IconButton(
-                                        onPressed: () async {
-                                          setState(() {
-                                            loading1 = true;
-                                          });
-                                          getImage(idfile.text, index);
-                                        },
+                                        onPressed: loading1
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  loading1 = true;
+                                                });
+                                                getImage(idfile.text, index);
+                                              },
                                         icon: const Icon(Icons.zoom_in)),
                               ),
                               Center(child: Text("${data5[index]['idfile']}"))
