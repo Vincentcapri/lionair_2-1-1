@@ -126,21 +126,23 @@ class _ReservasiMessState extends State<ReservasiMess> {
           .single
           .text;
       debugPrint('Result: $result');
-      StatusAlert.show(context,
-          duration: const Duration(seconds: 1),
-          configuration:
-              const IconConfiguration(icon: Icons.done, color: Colors.green),
-          title: "Input Data Success",
-          subtitle: "Please Refresh!!",
-          backgroundColor: Colors.grey[300]);
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => HomeScreen(
-            userapi: userapi,
-            passapi: passapi,
-            data: data,
-            data1: data1,
-            data2: data2),
-      ));
+      Future.delayed(Duration(seconds: 1), () {
+        StatusAlert.show(context,
+            duration: const Duration(seconds: 1),
+            configuration:
+                const IconConfiguration(icon: Icons.done, color: Colors.green),
+            title: "Input Data Success",
+            subtitle: "Please Refresh!!",
+            backgroundColor: Colors.grey[300]);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomeScreen(
+              userapi: userapi,
+              passapi: passapi,
+              data: data,
+              data1: data1,
+              data2: data2),
+        ));
+      });
     } else {
       debugPrint('Error: ${response.statusCode}');
       StatusAlert.show(
@@ -282,22 +284,33 @@ class _ReservasiMessState extends State<ReservasiMess> {
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
-                      onPressed: () async {
-                        if (location == 'Makassar' || location == 'Manado') {
-                          StatusAlert.show(
-                            context,
-                            duration: const Duration(seconds: 1),
-                            configuration: const IconConfiguration(
-                                icon: Icons.error, color: Colors.red),
-                            title: "Still On Progress",
-                            backgroundColor: Colors.grey[300],
-                          );
-                        } else {
-                          _sendReservation(
-                              gender.text, necessary.text, notes.text);
-                        }
-                      },
-                      child: const Text("Submit"),
+                      onPressed: loading
+                          ? null
+                          : () async {
+                              setState(() {
+                                loading = true;
+                              });
+                              if (location == 'Makassar' ||
+                                  location == 'Manado') {
+                                StatusAlert.show(
+                                  context,
+                                  duration: const Duration(seconds: 1),
+                                  configuration: const IconConfiguration(
+                                      icon: Icons.error, color: Colors.red),
+                                  title: "Still On Progress",
+                                  backgroundColor: Colors.grey[300],
+                                );
+                              } else {
+                                _sendReservation(
+                                    gender.text, necessary.text, notes.text);
+                              }
+                            },
+                      child: loading
+                          ? const SizedBox(
+                              height: 28,
+                              width: 30,
+                              child: CircularProgressIndicator())
+                          : const Text("Submit"),
                     ),
                     const SizedBox(
                       height: 50,
