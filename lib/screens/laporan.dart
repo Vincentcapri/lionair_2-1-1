@@ -61,6 +61,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   final _formKey = GlobalKey<FormState>();
 
   File? _image;
+  String titleImage = "Choose Image";
 
   bool loading = false;
   bool loading1 = false;
@@ -92,7 +93,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
+        titleImage = pickedImage.path;
       } else {
         debugPrint('No image selected.');
       }
@@ -480,61 +481,56 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Stack(
-                                                    clipBehavior: Clip.none,
-                                                    children: <Widget>[
-                                                      Positioned(
-                                                        right: -40.0,
-                                                        top: -40.0,
-                                                        child: InkResponse(
-                                                          onTap: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child:
-                                                              const CircleAvatar(
-                                                            backgroundColor:
-                                                                Colors.red,
-                                                            child: Icon(
-                                                                Icons.close),
-                                                          ),
-                                                        ),
+                                                return WillPopScope(
+                                                  onWillPop: () async {
+                                                    return false;
+                                                  },
+                                                  child: AlertDialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6.0)),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: const Text(
+                                                            "Submit"),
+                                                        onPressed: () {
+                                                          addImage(index);
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
                                                       ),
-                                                      Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: <Widget>[
-                                                          ListTile(
-                                                            leading: const Icon(
-                                                                Icons
-                                                                    .photo_library),
-                                                            title: const Text(
-                                                                'Choose Image'),
-                                                            onTap: () {
-                                                              _getImage();
-                                                            },
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            child:
-                                                                ElevatedButton(
-                                                              child: const Text(
-                                                                  "Submit"),
-                                                              onPressed: () {
-                                                                addImage(index);
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ],
+                                                      TextButton(
+                                                        child:
+                                                            const Text("Close"),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
                                                       ),
                                                     ],
+                                                    content: Stack(
+                                                      children: <Widget>[
+                                                        Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .photo_library),
+                                                              title: Text(
+                                                                  titleImage),
+                                                              onTap: () {
+                                                                _getImage();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 );
                                               });

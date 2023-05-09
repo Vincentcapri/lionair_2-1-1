@@ -510,7 +510,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: MediaQuery.of(context)
                                                   .textScaleFactor *
-                                              12,
+                                              13,
                                         ),
                                       )
                                     ]),
@@ -521,7 +521,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: MediaQuery.of(context)
                                                     .textScaleFactor *
-                                                12),
+                                                13),
                                       ),
                                     ]),
                                     Row(children: [
@@ -531,7 +531,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: MediaQuery.of(context)
                                                     .textScaleFactor *
-                                                12),
+                                                13),
                                       )
                                     ]),
                                     Row(
@@ -542,7 +542,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: MediaQuery.of(context)
                                                       .textScaleFactor *
-                                                  12),
+                                                  13),
                                         ),
                                       ],
                                     )
