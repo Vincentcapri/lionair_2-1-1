@@ -287,9 +287,6 @@ class _ReservasiMessState extends State<ReservasiMess> {
                       onPressed: loading
                           ? null
                           : () async {
-                              setState(() {
-                                loading = true;
-                              });
                               if (location == 'Makassar' ||
                                   location == 'Manado') {
                                 StatusAlert.show(
@@ -301,6 +298,9 @@ class _ReservasiMessState extends State<ReservasiMess> {
                                   backgroundColor: Colors.grey[300],
                                 );
                               } else {
+                                setState(() {
+                                  loading = true;
+                                });
                                 _sendReservation(
                                     gender.text, necessary.text, notes.text);
                               }

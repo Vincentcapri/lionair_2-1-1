@@ -312,9 +312,6 @@ class _InputLaporanState extends State<InputLaporan> {
                       onPressed: loading
                           ? null
                           : () async {
-                              setState(() {
-                                loading = true;
-                              });
                               if (location == 'Makassar' ||
                                   location == 'Manado') {
                                 StatusAlert.show(
@@ -326,6 +323,9 @@ class _InputLaporanState extends State<InputLaporan> {
                                   backgroundColor: Colors.grey[300],
                                 );
                               } else {
+                                setState(() {
+                                  loading = true;
+                                });
                                 _addReport(vidx.text, description.text);
                               }
                             },
