@@ -109,12 +109,6 @@ class _LihatRatingState extends State<LihatRating> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    ratingBaru = _initialRating;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -160,7 +154,8 @@ class _LihatRatingState extends State<LihatRating> {
                               '${data7[index]['name']}',
                             ),
                             RatingBar.builder(
-                              initialRating: 0,
+                              initialRating:
+                                  double.parse(data7[index]['rating']),
                               itemCount: 5,
                               itemBuilder: (context, index) {
                                 switch (index) {
@@ -173,7 +168,7 @@ class _LihatRatingState extends State<LihatRating> {
                                   case 1:
                                     return const Icon(
                                       Icons.sentiment_dissatisfied,
-                                      color: Colors.redAccent,
+                                      color: Colors.orange,
                                     );
                                   case 2:
                                     return const Icon(
