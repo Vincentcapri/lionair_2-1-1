@@ -62,6 +62,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
 
   File? _image;
   String titleImage = "Choose Image";
+  String titleCam = "Take Picture";
 
   bool loading = false;
   bool loading1 = false;
@@ -88,12 +89,26 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   TextEditingController idreff = TextEditingController();
   TextEditingController idfile = TextEditingController();
 
+  void _getCamera() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedImage != null && titleImage == "Choose Image") {
+        titleCam = pickedImage.path;
+        _image = File(pickedImage.path);
+      } else {
+        debugPrint('No image selected.');
+      }
+    });
+  }
+
   void _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      if (pickedImage != null) {
+      if (pickedImage != null && titleCam == "Take Picture") {
         titleImage = pickedImage.path;
+        _image = File(pickedImage.path);
       } else {
         debugPrint('No image selected.');
       }
@@ -359,6 +374,9 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             data4.clear();
+            vidx4 = '';
+            bookin3 = '';
+            bookout3 = '';
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => LihatDataEmployee(
                 userapi: userapi,
@@ -506,6 +524,10 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                                         child:
                                                             const Text("Close"),
                                                         onPressed: () {
+                                                          titleImage =
+                                                              "Choose Image";
+                                                          titleCam =
+                                                              "Take Picture";
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
@@ -517,6 +539,16 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: <Widget>[
+                                                            ListTile(
+                                                              leading: const Icon(
+                                                                  Icons
+                                                                      .camera_alt),
+                                                              title: Text(
+                                                                  titleCam),
+                                                              onTap: () {
+                                                                _getCamera();
+                                                              },
+                                                            ),
                                                             ListTile(
                                                               leading: const Icon(
                                                                   Icons

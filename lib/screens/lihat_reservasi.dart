@@ -392,6 +392,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
+            data3.clear();
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => HomeScreen(
                 userapi: userapi,

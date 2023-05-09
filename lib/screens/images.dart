@@ -291,9 +291,8 @@ class _Lihatgambarstate extends State<Lihatgambar> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            userapi = '';
-            passapi = '';
             data5.clear();
+            idreff5 = '';
             data6.clear();
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => Lihatlaporan(

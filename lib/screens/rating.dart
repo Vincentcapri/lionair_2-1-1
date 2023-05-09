@@ -135,17 +135,6 @@ class _LihatRatingState extends State<LihatRating> {
           },
         ),
         title: const Text("Rating"),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () async {
-              setState(() {
-                loading = true;
-              });
-            },
-            tooltip: "Refresh Data",
-          ),
-        ],
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
