@@ -50,7 +50,6 @@ class _LihatRatingState extends State<LihatRating> {
   var userapi;
   var passapi;
   late double ratingBaru;
-  final double _initialRating = 0;
 
   TextEditingController destination = TextEditingController();
   TextEditingController idpegawai = TextEditingController();

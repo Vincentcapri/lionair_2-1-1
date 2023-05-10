@@ -263,16 +263,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icons.done, color: Colors.green),
               title: "Login Success",
               backgroundColor: Colors.grey[300]);
-          Timer(const Duration(seconds: 1), () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                  userapi: userapi,
-                  passapi: passapi,
-                  data: hasil_result,
-                  data1: hasil_result1,
-                  data2: hasil_result2),
-            ));
-          });
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                userapi: userapi,
+                passapi: passapi,
+                data: hasil_result,
+                data1: hasil_result1,
+                data2: hasil_result2),
+          ));
         }
         setState(() {
           loading = false;
@@ -428,12 +426,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderRadius: BorderRadius.circular(10)),
                               disabledColor: Colors.grey,
                               color: Colors.blueAccent,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 80, vertical: 15),
-                                child: const Text('Submit',
-                                    style: TextStyle(color: Colors.white)),
-                              ),
                               onPressed: loading
                                   ? null
                                   : () async {
@@ -445,7 +437,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       getReservation(
                                           destination.text, idpegawai.text);
                                       // _showNotification();
-                                    }),
+                                    },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 80, vertical: 15),
+                                child: const Text('Submit',
+                                    style: TextStyle(color: Colors.white)),
+                              )),
                     ],
                   ),
                 ),

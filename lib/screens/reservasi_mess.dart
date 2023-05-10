@@ -126,7 +126,7 @@ class _ReservasiMessState extends State<ReservasiMess> {
           .single
           .text;
       debugPrint('Result: $result');
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:

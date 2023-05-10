@@ -191,17 +191,6 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 borderRadius: BorderRadius.circular(10)),
                             disabledColor: Colors.grey,
                             color: Colors.red,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 80, vertical: 15),
-                              child: loading
-                                  ? const SizedBox(
-                                      height: 28,
-                                      width: 30,
-                                      child: CircularProgressIndicator())
-                                  : const Text('Update',
-                                      style: TextStyle(color: Colors.white)),
-                            ),
                             onPressed: loading
                                 ? null
                                 : () async {
@@ -240,7 +229,18 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     } else {
                                       updatePass(newpass.text);
                                     }
-                                  }),
+                                  },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 80, vertical: 15),
+                              child: loading
+                                  ? const SizedBox(
+                                      height: 28,
+                                      width: 30,
+                                      child: CircularProgressIndicator())
+                                  : const Text('Update',
+                                      style: TextStyle(color: Colors.white)),
+                            )),
                       ],
                     ),
                   ),

@@ -138,7 +138,7 @@ class _InputLaporanState extends State<InputLaporan> {
       final parsedResponse = xml.XmlDocument.parse(responseBody);
       final result = parsedResponse.findAllElements('_x002D_').single.text;
       debugPrint('Result: $result');
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:
