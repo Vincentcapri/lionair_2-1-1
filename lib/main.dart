@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Lion Reservation',
+        color: Colors.white,
         routes: {
           'splash': (_) => const SplashScreen(),
           'login': (_) => const LoginScreen(),

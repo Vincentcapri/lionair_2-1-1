@@ -38,16 +38,14 @@ class _UserProfileState extends State<UserProfile> {
   var userapi;
   var passapi;
 
-  void logout() {
+  Future<void> logout() async {
     setState(() {
-      userapi = '';
-      passapi = '';
       data.clear();
       data1.clear();
       data2.clear();
     });
 
-    Navigator.pushReplacementNamed(context, 'login');
+    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
   }
 
   @override

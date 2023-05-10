@@ -43,6 +43,14 @@ class _UpdateEmailState extends State<UpdateEmail> {
   TextEditingController password = TextEditingController();
 
   @override
+  void dispose() {
+    newemail.dispose();
+    password.dispose();
+    otp.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

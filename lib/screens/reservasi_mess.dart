@@ -167,6 +167,15 @@ class _ReservasiMessState extends State<ReservasiMess> {
   }
 
   @override
+  void dispose() {
+    gender.dispose();
+    necessary.dispose();
+    notes.dispose();
+    destination.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final start = dateRange.start;
     final end = dateRange.end;

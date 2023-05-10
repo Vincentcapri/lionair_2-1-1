@@ -112,6 +112,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   }
 
   @override
+  void dispose() {
+    newpass.dispose();
+    renewpass.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

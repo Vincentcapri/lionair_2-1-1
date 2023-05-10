@@ -187,6 +187,14 @@ class _InputLaporanState extends State<InputLaporan> {
   }
 
   @override
+  void dispose() {
+    vidx.dispose();
+    description.dispose();
+    destination.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,

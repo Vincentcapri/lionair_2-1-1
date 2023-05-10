@@ -322,28 +322,33 @@ class _LoginScreenState extends State<LoginScreen> {
   // }
 
   @override
+  void dispose() {
+    idpegawai.dispose();
+    password.dispose();
+    destination.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        body: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/logo.png'),
-                  ),
+    return Scaffold(
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/logo.png'),
                 ),
-                width: double.infinity,
-                height: size.height * 0.4,
               ),
-              loginForm(context),
-            ],
-          ),
+              width: double.infinity,
+              height: size.height * 0.4,
+            ),
+            loginForm(context),
+          ],
         ),
       ),
     );

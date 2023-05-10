@@ -325,7 +325,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         final idx = list_result.findElements('IDX').first.text;
         final name = list_result.findElements('NAME').first.text;
         final rating = list_result.findElements('RATING').first.text;
-
         temporaryList10.add({
           'idx': idx,
           'rating': rating,
@@ -338,17 +337,69 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         debugPrint("object_hasilJson 10");
       }
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => LihatRating(
-            userapi: userapi,
-            passapi: passapi,
-            data: data,
-            data1: data1,
-            data2: data2,
-            data3: data3,
-            data7: data7,
-          ),
-        ));
+        if (double.parse(data7[index]['rating']) == 0) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => LihatRating(
+              userapi: userapi,
+              passapi: passapi,
+              data: data,
+              data1: data1,
+              data2: data2,
+              data3: data3,
+              data7: data7,
+            ),
+          ));
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return WillPopScope(
+                  onWillPop: () async {
+                    return false;
+                  },
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0)),
+                    actions: [
+                      TextButton(
+                        child: const Text("Yes"),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LihatRating(
+                              userapi: userapi,
+                              passapi: passapi,
+                              data: data,
+                              data1: data1,
+                              data2: data2,
+                              data3: data3,
+                              data7: data7,
+                            ),
+                          ));
+                        },
+                      ),
+                      TextButton(
+                        child: const Text("No"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          children: const <Widget>[
+                            Text("You have rated us"),
+                            Text("Want to update your Rating?"),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        }
         setState(() {
           loading2 = false;
         });

@@ -585,10 +585,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
     setState(() {
-      userapi = '';
-      passapi = '';
       data.clear();
       data1.clear();
       data2.clear();
@@ -596,7 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
       data4.clear();
     });
 
-    Navigator.pushReplacementNamed(context, 'login');
+    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
   }
 
   @override
@@ -610,6 +608,16 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       indiLength = maxLimit;
     }
+  }
+
+  @override
+  void dispose() {
+    idpegawai.dispose();
+    vidx.dispose();
+    destination.dispose();
+    otp.dispose();
+    phone.dispose();
+    super.dispose();
   }
 
   @override
@@ -2462,6 +2470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                         children: <Widget>[
                                                                                           TextFormField(
                                                                                             autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                            enabled: false,
                                                                                             autocorrect: false,
                                                                                             controller: phone,
                                                                                             decoration: const InputDecoration(

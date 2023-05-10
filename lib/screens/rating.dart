@@ -108,6 +108,15 @@ class _LihatRatingState extends State<LihatRating> {
   }
 
   @override
+  void dispose() {
+    idpegawai.dispose();
+    vidx.dispose();
+    destination.dispose();
+    _rating.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
