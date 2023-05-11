@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lionair_2/screens/about.dart';
 import 'package:lionair_2/screens/lihat_reservasi.dart';
 import 'package:lionair_2/screens/profile.dart';
 import 'package:status_alert/status_alert.dart';
@@ -191,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final namabed = list_result.findElements('NAMABED').first.text;
         final bookin = list_result.findElements('BOOKIN').first.text;
         final bookout = list_result.findElements('BOOKOUT').first.text;
+        final otpid = list_result.findElements('OTPID').first.text;
         temporaryList2_1.add({
           'idx': idx,
           'idkamar': idkamar,
@@ -199,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
           'nokamar': nokamar,
           'namabed': namabed,
           'bookin': bookin,
-          'bookout': bookout
+          'bookout': bookout,
+          'otpid': otpid
         });
         debugPrint("object 2.1");
         hasilJson = jsonEncode(temporaryList2_1);
@@ -665,6 +668,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ));
               } else if (value == 'menu_2') {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => About(
+                    userapi: userapi,
+                    passapi: passapi,
+                    data: data,
+                    data1: data1,
+                    data2: data2,
+                  ),
+                ));
+              } else if (value == 'menu_3') {
                 logout();
               }
             },
@@ -687,6 +700,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const PopupMenuItem<String>(
                   value: 'menu_2',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text('App Info'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'menu_3',
                   child: Row(
                     children: [
                       Icon(
@@ -725,6 +753,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       width: double.infinity,
                       height: size.height * 0.1,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: 350,
@@ -903,6 +934,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -921,6 +953,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       width: double.infinity,
                       height: size.height * 0.1,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: 350,
@@ -1345,94 +1380,91 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 ElevatedButton(
                                                               onPressed: loading4
                                                                   ? null
-                                                                  : () async {
-                                                                      setState(
-                                                                          () {
-                                                                        loading4 =
-                                                                            true;
-                                                                      });
-                                                                      Future.delayed(
-                                                                          const Duration(
-                                                                              seconds: 1),
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          loading4 =
-                                                                              false;
-                                                                        });
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return WillPopScope(
-                                                                                onWillPop: () async {
-                                                                                  return false;
-                                                                                },
-                                                                                child: AlertDialog(
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                                                                                  actions: [
-                                                                                    TextButton(
-                                                                                      child: const Text("Submit"),
-                                                                                      onPressed: () {
-                                                                                        cekOTP(otp.text, index);
-                                                                                        Navigator.of(context).pop();
-                                                                                      },
-                                                                                    ),
-                                                                                    TextButton(
-                                                                                      child: const Text("Close"),
-                                                                                      onPressed: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                      },
-                                                                                    ),
-                                                                                  ],
-                                                                                  content: Stack(
-                                                                                    children: <Widget>[
-                                                                                      Column(
-                                                                                        mainAxisSize: MainAxisSize.min,
+                                                                  : data2[index]['otpid'] != ""
+                                                                      ? null
+                                                                      : () async {
+                                                                          setState(
+                                                                              () {
+                                                                            loading4 =
+                                                                                true;
+                                                                          });
+                                                                          Future.delayed(
+                                                                              const Duration(seconds: 1),
+                                                                              () {
+                                                                            setState(() {
+                                                                              loading4 = false;
+                                                                            });
+                                                                            showDialog(
+                                                                                context: context,
+                                                                                builder: (BuildContext context) {
+                                                                                  return WillPopScope(
+                                                                                    onWillPop: () async {
+                                                                                      return false;
+                                                                                    },
+                                                                                    child: AlertDialog(
+                                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+                                                                                      actions: [
+                                                                                        TextButton(
+                                                                                          child: const Text("Submit"),
+                                                                                          onPressed: () {
+                                                                                            cekOTP(otp.text, index);
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        ),
+                                                                                        TextButton(
+                                                                                          child: const Text("Close"),
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        ),
+                                                                                      ],
+                                                                                      content: Stack(
                                                                                         children: <Widget>[
-                                                                                          TextFormField(
-                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                            enabled: false,
-                                                                                            autocorrect: false,
-                                                                                            controller: phone,
-                                                                                            decoration: const InputDecoration(
-                                                                                              labelText: 'Phone',
-                                                                                              icon: Icon(Icons.phone),
-                                                                                            ),
-                                                                                            validator: (value) {
-                                                                                              return (value != null && value.length == 10) ? null : 'Phone number must be more than or equal to 10 numbers';
-                                                                                            },
-                                                                                          ),
-                                                                                          const SizedBox(height: 30),
-                                                                                          TextFormField(
-                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                            autocorrect: false,
-                                                                                            controller: otp,
-                                                                                            decoration: InputDecoration(
-                                                                                              hintText: '123***',
-                                                                                              labelText: 'OTP',
-                                                                                              icon: const Icon(Icons.chat),
-                                                                                              suffixIcon: TextButton(
-                                                                                                onPressed: () {
-                                                                                                  getOTP(phone.text, index);
+                                                                                          Column(
+                                                                                            mainAxisSize: MainAxisSize.min,
+                                                                                            children: <Widget>[
+                                                                                              TextFormField(
+                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                enabled: false,
+                                                                                                autocorrect: false,
+                                                                                                controller: phone,
+                                                                                                decoration: const InputDecoration(
+                                                                                                  labelText: 'Phone',
+                                                                                                  icon: Icon(Icons.phone),
+                                                                                                ),
+                                                                                                validator: (value) {
+                                                                                                  return (value != null && value.length == 10) ? null : 'Phone number must be more than or equal to 10 numbers';
                                                                                                 },
-                                                                                                child: const Text("Request OTP"),
                                                                                               ),
-                                                                                            ),
-                                                                                            validator: (value) {
-                                                                                              return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6';
-                                                                                            },
+                                                                                              const SizedBox(height: 30),
+                                                                                              TextFormField(
+                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                autocorrect: false,
+                                                                                                controller: otp,
+                                                                                                decoration: InputDecoration(
+                                                                                                  hintText: '123***',
+                                                                                                  labelText: 'OTP',
+                                                                                                  icon: const Icon(Icons.chat),
+                                                                                                  suffixIcon: TextButton(
+                                                                                                    onPressed: () {
+                                                                                                      getOTP(phone.text, index);
+                                                                                                    },
+                                                                                                    child: const Text("Request OTP"),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                validator: (value) {
+                                                                                                  return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6';
+                                                                                                },
+                                                                                              ),
+                                                                                            ],
                                                                                           ),
                                                                                         ],
                                                                                       ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            });
-                                                                      });
-                                                                    },
+                                                                                    ),
+                                                                                  );
+                                                                                });
+                                                                          });
+                                                                        },
                                                               style:
                                                                   ElevatedButton
                                                                       .styleFrom(
@@ -1465,6 +1497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -1483,6 +1516,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       width: double.infinity,
                       height: size.height * 0.1,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: 350,
@@ -1820,6 +1856,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -1838,6 +1875,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       width: double.infinity,
                       height: size.height * 0.1,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: 350,
@@ -2421,94 +2461,94 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 ElevatedButton(
                                                               onPressed: loading4
                                                                   ? null
-                                                                  : () async {
-                                                                      setState(
-                                                                          () {
-                                                                        loading4 =
-                                                                            true;
-                                                                      });
-                                                                      Future.delayed(
-                                                                          const Duration(
-                                                                              seconds: 1),
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          loading4 =
-                                                                              false;
-                                                                        });
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return WillPopScope(
-                                                                                onWillPop: () async {
-                                                                                  return false;
-                                                                                },
-                                                                                child: AlertDialog(
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                                                                                  actions: [
-                                                                                    TextButton(
-                                                                                      child: const Text("Submit"),
-                                                                                      onPressed: () {
-                                                                                        cekOTP(otp.text, index);
-                                                                                        Navigator.of(context).pop();
-                                                                                      },
-                                                                                    ),
-                                                                                    TextButton(
-                                                                                      child: const Text("Close"),
-                                                                                      onPressed: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                      },
-                                                                                    ),
-                                                                                  ],
-                                                                                  content: Stack(
-                                                                                    children: <Widget>[
-                                                                                      Column(
-                                                                                        mainAxisSize: MainAxisSize.min,
+                                                                  : data2[index]['otpid'] != ""
+                                                                      ? null
+                                                                      : () async {
+                                                                          setState(
+                                                                              () {
+                                                                            loading4 =
+                                                                                true;
+                                                                          });
+                                                                          Future.delayed(
+                                                                              const Duration(seconds: 1),
+                                                                              () {
+                                                                            setState(() {
+                                                                              loading4 = false;
+                                                                            });
+                                                                            showDialog(
+                                                                                context: context,
+                                                                                builder: (BuildContext context) {
+                                                                                  return WillPopScope(
+                                                                                    onWillPop: () async {
+                                                                                      return false;
+                                                                                    },
+                                                                                    child: AlertDialog(
+                                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+                                                                                      actions: [
+                                                                                        TextButton(
+                                                                                          child: const Text("Submit"),
+                                                                                          onPressed: () {
+                                                                                            cekOTP(otp.text, index);
+                                                                                            Future.delayed(const Duration(seconds: 1), () {
+                                                                                              updateData1(destination.text, idpegawai.text);
+                                                                                              updateData2(destination.text, idpegawai.text);
+                                                                                            });
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        ),
+                                                                                        TextButton(
+                                                                                          child: const Text("Close"),
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        ),
+                                                                                      ],
+                                                                                      content: Stack(
                                                                                         children: <Widget>[
-                                                                                          TextFormField(
-                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                            enabled: false,
-                                                                                            autocorrect: false,
-                                                                                            controller: phone,
-                                                                                            decoration: const InputDecoration(
-                                                                                              labelText: 'Phone',
-                                                                                              icon: Icon(Icons.phone),
-                                                                                            ),
-                                                                                            validator: (value) {
-                                                                                              return (value != null && value.length >= 10) ? null : 'Phone number must be more than or equal to 10 numbers';
-                                                                                            },
-                                                                                          ),
-                                                                                          const SizedBox(height: 30),
-                                                                                          TextFormField(
-                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                            autocorrect: false,
-                                                                                            controller: otp,
-                                                                                            decoration: InputDecoration(
-                                                                                              hintText: '123***',
-                                                                                              labelText: 'OTP',
-                                                                                              icon: const Icon(Icons.chat),
-                                                                                              suffixIcon: TextButton(
-                                                                                                onPressed: () {
-                                                                                                  getOTP(phone.text, index);
+                                                                                          Column(
+                                                                                            mainAxisSize: MainAxisSize.min,
+                                                                                            children: <Widget>[
+                                                                                              TextFormField(
+                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                autocorrect: false,
+                                                                                                controller: phone,
+                                                                                                decoration: const InputDecoration(
+                                                                                                  labelText: 'Phone',
+                                                                                                  icon: Icon(Icons.phone),
+                                                                                                ),
+                                                                                                validator: (value) {
+                                                                                                  return (value != null && value.length >= 10) ? null : 'Phone number must be more than or equal to 10 numbers';
                                                                                                 },
-                                                                                                child: const Text("Request OTP"),
                                                                                               ),
-                                                                                            ),
-                                                                                            validator: (value) {
-                                                                                              return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6 characters';
-                                                                                            },
+                                                                                              const SizedBox(height: 30),
+                                                                                              TextFormField(
+                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                autocorrect: false,
+                                                                                                controller: otp,
+                                                                                                decoration: InputDecoration(
+                                                                                                  hintText: '123***',
+                                                                                                  labelText: 'OTP',
+                                                                                                  icon: const Icon(Icons.chat),
+                                                                                                  suffixIcon: TextButton(
+                                                                                                    onPressed: () {
+                                                                                                      getOTP(phone.text, index);
+                                                                                                    },
+                                                                                                    child: const Text("Request OTP"),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                validator: (value) {
+                                                                                                  return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6 characters';
+                                                                                                },
+                                                                                              ),
+                                                                                            ],
                                                                                           ),
                                                                                         ],
                                                                                       ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            });
-                                                                      });
-                                                                    },
+                                                                                    ),
+                                                                                  );
+                                                                                });
+                                                                          });
+                                                                        },
                                                               style:
                                                                   ElevatedButton
                                                                       .styleFrom(
@@ -2541,6 +2581,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

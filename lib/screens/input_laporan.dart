@@ -206,7 +206,7 @@ class _InputLaporanState extends State<InputLaporan> {
         debugPrint("object_hasilJson 6");
       }
 
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 5), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:

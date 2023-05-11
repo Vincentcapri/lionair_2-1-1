@@ -310,7 +310,7 @@ class _Lihatgambarstate extends State<Lihatgambar> {
             ));
           },
         ),
-        title: const Text("List Images"),
+        title: const Text("Attachment"),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
@@ -361,7 +361,7 @@ class _Lihatgambarstate extends State<Lihatgambar> {
                                               },
                                         icon: const Icon(Icons.zoom_in)),
                               ),
-                              Center(child: Text("${data5[index]['idfile']}"))
+                              Center(child: Text("${data5[index]['filename']}"))
                             ],
                           ),
                         ),

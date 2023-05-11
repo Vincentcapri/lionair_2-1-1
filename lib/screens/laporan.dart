@@ -4,8 +4,8 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lionair_2/screens/home_screen.dart';
 import 'package:lionair_2/screens/images.dart';
-import 'package:lionair_2/screens/lihat_reservasi.dart';
 import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
@@ -75,7 +75,6 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   List data4 = [];
   List data5 = [];
   List data6 = [];
-  List dataBaru4 = [];
   var hasilJson;
   var vidx4;
   var bookin3;
@@ -178,19 +177,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       }
 
       Future.delayed(const Duration(seconds: 3), () {
-        Map<String, dynamic> map1 =
-            Map.fromIterable(data4, key: (e) => e['idx']);
-        Map<String, dynamic> map2 =
-            Map.fromIterable(dataBaru4, key: (e) => e['idx']);
-
-        map1.addAll(map2);
-
-        List mergedList = map1.values.toList();
-
-        // debugPrint('$mergedList');
-
         setState(() {
-          data4 = mergedList;
           loading = false;
         });
       });
@@ -209,7 +196,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       });
     }
     setState(() {
-      dataBaru4 = temporaryList4_1;
+      data4 = temporaryList4_1;
       loading = true;
       // debugPrint('$dataBaru4');
     });
@@ -378,13 +365,12 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
             bookin3 = '';
             bookout3 = '';
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LihatDataEmployee(
+              builder: (context) => HomeScreen(
                 userapi: userapi,
                 passapi: passapi,
                 data: data,
                 data1: data1,
                 data2: data2,
-                data3: data3,
               ),
             ));
           },
@@ -461,7 +447,8 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                 DataColumn2(
                                     label: Text("Status"), size: ColumnSize.S),
                                 DataColumn2(
-                                    label: Text("Image"), size: ColumnSize.L),
+                                    label: Text("Attachment"),
+                                    size: ColumnSize.L),
                               ],
                               rows: List<DataRow>.generate(
                                 data4.length,
@@ -494,120 +481,175 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                           color: Colors.red),
                                     )),
                                     DataCell(
-                                      TextButton(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return WillPopScope(
-                                                  onWillPop: () async {
-                                                    return false;
+                                      data4[index]['status'] == "CLOSE"
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          Colors.redAccent,
+                                                    ),
+                                                    onPressed: loading1
+                                                        ? null
+                                                        : () async {
+                                                            setState(() {
+                                                              loading1 = true;
+                                                            });
+                                                            getIDFile(
+                                                                idreff.text,
+                                                                index);
+                                                          },
+                                                    child: loading1
+                                                        ? const SizedBox(
+                                                            height: 20,
+                                                            width: 22,
+                                                            child:
+                                                                CircularProgressIndicator())
+                                                        : const Text("View"),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Row(
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return WillPopScope(
+                                                            onWillPop:
+                                                                () async {
+                                                              return false;
+                                                            },
+                                                            child: AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              6.0)),
+                                                              actions: [
+                                                                TextButton(
+                                                                  child: const Text(
+                                                                      "Submit"),
+                                                                  onPressed:
+                                                                      () {
+                                                                    addImage(
+                                                                        index);
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                                TextButton(
+                                                                  child: const Text(
+                                                                      "Close"),
+                                                                  onPressed:
+                                                                      () {
+                                                                    titleImage =
+                                                                        "Choose Image";
+                                                                    titleCam =
+                                                                        "Take Picture";
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                ),
+                                                              ],
+                                                              content: Stack(
+                                                                children: <Widget>[
+                                                                  Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: <Widget>[
+                                                                      ListTile(
+                                                                        leading:
+                                                                            const Icon(Icons.camera_alt),
+                                                                        title: Text(
+                                                                            titleCam),
+                                                                        onTap:
+                                                                            () {
+                                                                          _getCamera();
+                                                                        },
+                                                                      ),
+                                                                      ListTile(
+                                                                        leading:
+                                                                            const Icon(Icons.photo_library),
+                                                                        title: Text(
+                                                                            titleImage),
+                                                                        onTap:
+                                                                            () {
+                                                                          _getImage();
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        });
                                                   },
-                                                  child: AlertDialog(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6.0)),
-                                                    actions: [
-                                                      TextButton(
-                                                        child: const Text(
-                                                            "Submit"),
-                                                        onPressed: () {
-                                                          addImage(index);
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      ),
-                                                      TextButton(
-                                                        child:
-                                                            const Text("Close"),
-                                                        onPressed: () {
-                                                          titleImage =
-                                                              "Choose Image";
-                                                          titleCam =
-                                                              "Take Picture";
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      ),
-                                                    ],
-                                                    content: Stack(
+                                                  child: const Row(
                                                       children: <Widget>[
                                                         Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: <Widget>[
-                                                            ListTile(
-                                                              leading: const Icon(
-                                                                  Icons
-                                                                      .camera_alt),
-                                                              title: Text(
-                                                                  titleCam),
-                                                              onTap: () {
-                                                                _getCamera();
-                                                              },
-                                                            ),
-                                                            ListTile(
-                                                              leading: const Icon(
-                                                                  Icons
-                                                                      .photo_library),
-                                                              title: Text(
-                                                                  titleImage),
-                                                              onTap: () {
-                                                                _getImage();
-                                                              },
-                                                            ),
+                                                          children: [
+                                                            Row(children: <Widget>[
+                                                              Icon(
+                                                                Icons
+                                                                    .photo_library,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                "Choose Image",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .grey),
+                                                              ),
+                                                            ]),
                                                           ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ]),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.redAccent,
                                                   ),
-                                                );
-                                              });
-                                        },
-                                        child: Row(children: <Widget>[
-                                          const Column(
-                                            children: [
-                                              Row(children: <Widget>[
-                                                Icon(
-                                                  Icons.photo_library,
-                                                  color: Colors.grey,
+                                                  onPressed: loading1
+                                                      ? null
+                                                      : () async {
+                                                          setState(() {
+                                                            loading1 = true;
+                                                          });
+                                                          getIDFile(idreff.text,
+                                                              index);
+                                                        },
+                                                  child: loading1
+                                                      ? const SizedBox(
+                                                          height: 20,
+                                                          width: 22,
+                                                          child:
+                                                              CircularProgressIndicator())
+                                                      : const Text("View"),
                                                 ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  "Choose Image",
-                                                  style: TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                              ]),
-                                            ],
-                                          ),
-                                          const SizedBox(width: 5),
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.redAccent,
+                                              ],
                                             ),
-                                            onPressed: loading1
-                                                ? null
-                                                : () async {
-                                                    setState(() {
-                                                      loading1 = true;
-                                                    });
-                                                    getIDFile(
-                                                        idreff.text, index);
-                                                  },
-                                            child: loading1
-                                                ? const SizedBox(
-                                                    height: 20,
-                                                    width: 22,
-                                                    child:
-                                                        CircularProgressIndicator())
-                                                : const Text("View"),
-                                          ),
-                                        ]),
-                                      ),
                                     ),
                                   ],
                                 ),

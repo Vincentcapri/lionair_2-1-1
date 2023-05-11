@@ -597,42 +597,74 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                               const Spacer(
                                 flex: 1,
                               ),
-                              SizedBox(
-                                height: 48,
-                                width: 95,
-                                child: Column(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: loading1
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              getReport(destination.text,
-                                                  vidx.text, index);
-                                            },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.redAccent,
-                                      ),
-                                      child: loading1
-                                          ? const SizedBox(
-                                              height: 28,
-                                              width: 30,
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : Text(
-                                              "COMPLAINT",
+                              data3[index]['docstate'] == "VOID"
+                                  ? Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.width *
+                                              0.015),
+                                      child: Container(
+                                        width: 80,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                            border:
+                                                Border.all(color: Colors.red)),
+                                        child: const Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "VOID",
                                               style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .textScaleFactor *
-                                                          11),
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold),
                                             ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Padding(
+                                      // height: 48,
+                                      // width: 95,
+                                      padding: EdgeInsets.only(
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.035),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  IconButton(
+                                                    iconSize: 50,
+                                                    icon: loading2
+                                                        ? const CircularProgressIndicator()
+                                                        : const Icon(Icons
+                                                            .sentiment_neutral_outlined),
+                                                    color: const Color.fromARGB(
+                                                        255, 176, 176, 171),
+                                                    onPressed: loading2
+                                                        ? null
+                                                        : () async {
+                                                            setState(() {
+                                                              loading2 = true;
+                                                            });
+                                                            getRating(vidx.text,
+                                                                index);
+                                                          },
+                                                  ),
+                                                  const Text("Rate Us"),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              )
                             ],
                           ),
                           const Divider(
@@ -718,76 +750,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                   ),
                                 ],
                               ),
-                              const Spacer(
-                                flex: 1,
-                              ),
-                              data3[index]['docstate'] == "VOID"
-                                  ? Padding(
-                                      padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.015),
-                                      child: Container(
-                                        width: 80,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(3),
-                                            border:
-                                                Border.all(color: Colors.red)),
-                                        child: const Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "VOID",
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      // height: 48,
-                                      // width: 95,
-                                      padding: EdgeInsets.only(
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.035),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  IconButton(
-                                                    iconSize: 50,
-                                                    icon: loading2
-                                                        ? const CircularProgressIndicator()
-                                                        : const Icon(Icons
-                                                            .sentiment_neutral_outlined),
-                                                    color: const Color.fromARGB(
-                                                        255, 176, 176, 171),
-                                                    onPressed: loading2
-                                                        ? null
-                                                        : () async {
-                                                            setState(() {
-                                                              loading2 = true;
-                                                            });
-                                                            getRating(vidx.text,
-                                                                index);
-                                                          },
-                                                  ),
-                                                  const Text("Rate Us"),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                             ],
                           ),
                         ],

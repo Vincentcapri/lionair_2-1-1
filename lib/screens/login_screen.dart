@@ -239,6 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final namabed = list_result.findElements('NAMABED').first.text;
         final bookin = list_result.findElements('BOOKIN').first.text;
         final bookout = list_result.findElements('BOOKOUT').first.text;
+        final otpid = list_result.findElements('OTPID').first.text;
         temporaryList2.add({
           'idx': idx,
           'idkamar': idkamar,
@@ -247,7 +248,8 @@ class _LoginScreenState extends State<LoginScreen> {
           'nokamar': nokamar,
           'namabed': namabed,
           'bookin': bookin,
-          'bookout': bookout
+          'bookout': bookout,
+          'otpid': otpid
         });
         debugPrint("object 2");
         hasilJson = jsonEncode(temporaryList2);
