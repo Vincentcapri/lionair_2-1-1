@@ -96,9 +96,9 @@ class _UserProfileState extends State<UserProfile> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Column(
+                        const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.account_circle,
                                 size: 100,

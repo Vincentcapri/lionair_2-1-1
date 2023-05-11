@@ -1,4 +1,6 @@
-// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, unused_field, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, unused_field, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously, non_constant_identifier_names
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import "dart:async";
@@ -35,14 +37,14 @@ class _ReservasiMessState extends State<ReservasiMess> {
       this.userapi, this.passapi, this.data, this.data1, this.data2);
 
   final _formKey = GlobalKey<FormState>();
-
-  Xml2Json xml2json = Xml2Json();
-
   var loading = false;
+
   List data = [];
   List data1 = [];
   List data2 = [];
-  List result = [];
+  List dataBaru1 = [];
+  Xml2Json xml2json = Xml2Json();
+  var hasilJson;
   var gender1;
   var userapi;
   var passapi;
@@ -52,6 +54,7 @@ class _ReservasiMessState extends State<ReservasiMess> {
   String location = 'Balaraja';
   List<String> items = ['Balaraja', 'Makassar', 'Manado'];
 
+  final TextEditingController idpegawai = TextEditingController();
   final TextEditingController destination = TextEditingController();
   final TextEditingController gender = TextEditingController();
   final TextEditingController necessary = TextEditingController();
@@ -126,23 +129,6 @@ class _ReservasiMessState extends State<ReservasiMess> {
           .single
           .text;
       debugPrint('Result: $result');
-      Future.delayed(const Duration(seconds: 1), () {
-        StatusAlert.show(context,
-            duration: const Duration(seconds: 1),
-            configuration:
-                const IconConfiguration(icon: Icons.done, color: Colors.green),
-            title: "Input Data Success",
-            subtitle: "Please Refresh!!",
-            backgroundColor: Colors.grey[300]);
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomeScreen(
-              userapi: userapi,
-              passapi: passapi,
-              data: data,
-              data1: data1,
-              data2: data2),
-        ));
-      });
     } else {
       debugPrint('Error: ${response.statusCode}');
       StatusAlert.show(
@@ -157,6 +143,100 @@ class _ReservasiMessState extends State<ReservasiMess> {
         loading = false;
       });
     }
+  }
+
+  void updateData1(String destination, String idpegawai) async {
+    final temporaryList1_1 = [];
+    idpegawai = data[0]['idemployee'];
+    data1.clear();
+
+    String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+        '<soap:Body>' +
+        '<GetReservationByIDSTaffPending xmlns="http://tempuri.org/">' +
+        '<UsernameApi>$userapi</UsernameApi>' +
+        '<PasswordApi>$passapi</PasswordApi>' +
+        '<DESTINATION>BLJ</DESTINATION>' +
+        '<IDSTAFF>$idpegawai</IDSTAFF>' +
+        '</GetReservationByIDSTaffPending>' +
+        '</soap:Body>' +
+        '</soap:Envelope>';
+
+    final response =
+        await http.post(Uri.parse(url_GetReservationByIDSTaffPending),
+            headers: <String, String>{
+              "Access-Control-Allow-Origin": "*",
+              'SOAPAction': 'http://tempuri.org/GetReservationByIDSTaffPending',
+              "Access-Control-Allow-Credentials": "true",
+              'Content-type': 'text/xml; charset=utf-8',
+            },
+            body: objBody);
+
+    if (response.statusCode == 200) {
+      final document = xml.XmlDocument.parse(response.body);
+
+      // debugPrint("=================");
+      // debugPrint(
+      //     "document.toXmlString : ${document.toXmlString(pretty: true, indent: '\t')}");
+      // debugPrint("=================");
+
+      final listResultAll1 = document.findAllElements('_x002D_');
+
+      for (final list_result in listResultAll1) {
+        final idx = list_result.findElements('IDX').first.text;
+        final checkin = list_result.findElements('CHECKIN').first.text;
+        final checkout = list_result.findElements('CHECKOUT').first.text;
+        final necessary = list_result.findElements('NECESSARY').first.text;
+        final notes = list_result.findElements('NOTES').first.text;
+        final insertdate = list_result.findElements('INSERTDATE').first.text;
+        temporaryList1_1.add({
+          'idx': idx,
+          'checkin': checkin,
+          'checkout': checkout,
+          'necessary': necessary,
+          'notes': notes,
+          'insertdate': insertdate,
+        });
+        debugPrint("object 1.1");
+        hasilJson = jsonEncode(temporaryList1_1);
+
+        debugPrint(hasilJson);
+        debugPrint("object_hasilJson 1.1");
+      }
+      Future.delayed(const Duration(seconds: 5), () {
+        StatusAlert.show(context,
+            duration: const Duration(seconds: 1),
+            configuration:
+                const IconConfiguration(icon: Icons.done, color: Colors.green),
+            title: "Input Data Success",
+            backgroundColor: Colors.grey[300]);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomeScreen(
+              userapi: userapi,
+              passapi: passapi,
+              data: data,
+              data1: data1,
+              data2: data2),
+        ));
+        setState(() {
+          loading = false;
+        });
+      });
+    } else {
+      debugPrint('Error: ${response.statusCode}');
+      StatusAlert.show(
+        context,
+        duration: const Duration(seconds: 1),
+        configuration:
+            const IconConfiguration(icon: Icons.error, color: Colors.red),
+        title: "Update1 Failed, ${response.statusCode}",
+        backgroundColor: Colors.grey[300],
+      );
+    }
+    setState(() {
+      data1 = temporaryList1_1;
+      loading = true;
+    });
   }
 
   @override
@@ -312,6 +392,9 @@ class _ReservasiMessState extends State<ReservasiMess> {
                                 });
                                 _sendReservation(
                                     gender.text, necessary.text, notes.text);
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  updateData1(destination.text, idpegawai.text);
+                                });
                               }
                             },
                       child: loading

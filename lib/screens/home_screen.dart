@@ -47,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loading2 = false;
   bool loading3 = false;
   bool loading4 = false;
-  bool buttonClicked = false;
 
   List data = [];
   List data1 = [];
@@ -71,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController phone = TextEditingController();
 
   void updateData1(String destination, String idpegawai) async {
-    final temporaryList1 = [];
+    final temporaryList1_1 = [];
     idpegawai = data[0]['idemployee'];
     data1.clear();
 
@@ -114,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final necessary = list_result.findElements('NECESSARY').first.text;
         final notes = list_result.findElements('NOTES').first.text;
         final insertdate = list_result.findElements('INSERTDATE').first.text;
-        temporaryList1.add({
+        temporaryList1_1.add({
           'idx': idx,
           'checkin': checkin,
           'checkout': checkout,
@@ -123,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'insertdate': insertdate,
         });
         debugPrint("object 1.1");
-        hasilJson = jsonEncode(temporaryList1);
+        hasilJson = jsonEncode(temporaryList1_1);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 1.1");
@@ -141,14 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     setState(() {
-      dataBaru1 = temporaryList1;
+      dataBaru1 = temporaryList1_1;
       loading = true;
       debugPrint('$dataBaru1');
     });
   }
 
   void updateData2(String destination, String idpegawai) async {
-    final temporaryList2 = [];
+    final temporaryList2_1 = [];
     idpegawai = data[0]['idemployee'];
     data2.clear();
 
@@ -192,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final namabed = list_result.findElements('NAMABED').first.text;
         final bookin = list_result.findElements('BOOKIN').first.text;
         final bookout = list_result.findElements('BOOKOUT').first.text;
-        temporaryList2.add({
+        temporaryList2_1.add({
           'idx': idx,
           'idkamar': idkamar,
           'areamess': areamess,
@@ -203,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'bookout': bookout
         });
         debugPrint("object 2.1");
-        hasilJson = jsonEncode(temporaryList2);
+        hasilJson = jsonEncode(temporaryList2_1);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 2.1");
@@ -251,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     setState(() {
-      dataBaru2 = temporaryList2;
+      dataBaru2 = temporaryList2_1;
       loading = true;
       // debugPrint('$dataBaru2');
     });
@@ -370,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getReport(String destination, String vidx, index) async {
-    final temporaryList5 = [];
+    final temporaryList4 = [];
     vidx = data2[index]['idx'];
     String bookin = data2[index]['bookin'];
     String bookout = data2[index]['bookout'];
@@ -415,7 +414,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final resolution = list_result.findElements('RESOLUTION').first.text;
         final userinsert = list_result.findElements('USERINSERT').first.text;
         final status = list_result.findElements('STATUS').first.text;
-        temporaryList5.add({
+        temporaryList4.add({
           'idx': idx,
           'vidx': vidx,
           'date': date,
@@ -426,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'status': status
         });
         debugPrint("object 4");
-        hasilJson = jsonEncode(temporaryList5);
+        hasilJson = jsonEncode(temporaryList4);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 4");
@@ -462,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     setState(() {
-      data4 = temporaryList5;
+      data4 = temporaryList4;
       vidxBaru = vidx;
       bookinBaru = bookin;
       bookoutBaru = bookout;
@@ -671,10 +670,10 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             itemBuilder: (BuildContext context) {
               return [
-                PopupMenuItem<String>(
+                const PopupMenuItem<String>(
                   value: 'menu_1',
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.account_circle,
                         color: Colors.black,
@@ -686,10 +685,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                PopupMenuItem<String>(
+                const PopupMenuItem<String>(
                   value: 'menu_2',
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.logout,
                         color: Colors.black,
@@ -1138,22 +1137,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Area"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Block"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Number"),
                                                           ]),
                                                           Row(
-                                                            children: const [
+                                                            children: [
                                                               Text("Bed"),
                                                             ],
                                                           ),
@@ -1277,15 +1276,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-In"),
                                                         ]),
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-Out"),
                                                         ]),
                                                       ],
@@ -1677,15 +1676,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Necessary"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Notes"),
                                                           ]),
                                                         ]),
@@ -1720,16 +1719,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-In"),
                                                         ]),
                                                         Row(
-                                                          children: const [
+                                                          children: [
                                                             Text("Book-Out"),
                                                           ],
                                                         ),
@@ -2032,15 +2031,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Necessary"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Notes"),
                                                           ]),
                                                         ]),
@@ -2075,16 +2074,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-In"),
                                                         ]),
                                                         Row(
-                                                          children: const [
+                                                          children: [
                                                             Text("Book-Out"),
                                                           ],
                                                         ),
@@ -2214,22 +2213,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Area"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Block"),
                                                           ]),
-                                                          Row(children: const [
+                                                          Row(children: [
                                                             Text("Number"),
                                                           ]),
                                                           Row(
-                                                            children: const [
+                                                            children: [
                                                               Text("Bed"),
                                                             ],
                                                           ),
@@ -2353,15 +2352,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Column(
+                                                    const Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-In"),
                                                         ]),
-                                                        Row(children: const [
+                                                        Row(children: [
                                                           Text("Book-Out"),
                                                         ]),
                                                       ],

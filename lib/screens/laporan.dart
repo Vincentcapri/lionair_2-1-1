@@ -116,7 +116,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   }
 
   void updateData4(String destination, String vidx) async {
-    final temporaryList6 = [];
+    final temporaryList4_1 = [];
     vidx = vidx4;
     data4.clear();
 
@@ -160,7 +160,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
         final resolution = list_result.findElements('RESOLUTION').first.text;
         final userinsert = list_result.findElements('USERINSERT').first.text;
         final status = list_result.findElements('STATUS').first.text;
-        temporaryList6.add({
+        temporaryList4_1.add({
           'idx': idx,
           'vidx': vidx,
           'date': date,
@@ -171,7 +171,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
           'status': status
         });
         debugPrint("object 6");
-        hasilJson = jsonEncode(temporaryList6);
+        hasilJson = jsonEncode(temporaryList4_1);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 6");
@@ -209,14 +209,14 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       });
     }
     setState(() {
-      dataBaru4 = temporaryList6;
+      dataBaru4 = temporaryList4_1;
       loading = true;
       // debugPrint('$dataBaru4');
     });
   }
 
   void getIDFile(String idreff, index) async {
-    final temporaryList7 = [];
+    final temporaryList6 = [];
     idreff = data4[index]['idx'];
 
     String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -253,12 +253,12 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       for (final list_result in list_result_all6) {
         final idfile = list_result.findElements('IDFILE').first.text;
         final filename = list_result.findElements('FILENAME').first.text;
-        temporaryList7.add({
+        temporaryList6.add({
           'idfile': idfile,
           'filename': filename,
         });
         debugPrint("object 7");
-        hasilJson = jsonEncode(temporaryList7);
+        hasilJson = jsonEncode(temporaryList6);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 7");
@@ -300,7 +300,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       });
     }
     setState(() {
-      data5 = temporaryList7;
+      data5 = temporaryList6;
       idreffbaru = idreff;
       loading1 = true;
       // debugPrint('$dataBaru4');
@@ -568,9 +568,9 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                               });
                                         },
                                         child: Row(children: <Widget>[
-                                          Column(
+                                          const Column(
                                             children: [
-                                              Row(children: const <Widget>[
+                                              Row(children: <Widget>[
                                                 Icon(
                                                   Icons.photo_library,
                                                   color: Colors.grey,

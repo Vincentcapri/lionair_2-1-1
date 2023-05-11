@@ -20,6 +20,8 @@ class LoginScreen extends StatefulWidget {
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
+
+  static void getData() {}
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -167,11 +169,11 @@ class _LoginScreenState extends State<LoginScreen> {
           'notes': notes,
           'insertdate': insertdate,
         });
-        debugPrint("object 2");
+        debugPrint("object 1");
         hasilJson = jsonEncode(temporaryList1);
 
         debugPrint(hasilJson);
-        debugPrint("object_hasilJson 2");
+        debugPrint("object_hasilJson 1");
       }
       loading = false;
     } else {
@@ -247,11 +249,11 @@ class _LoginScreenState extends State<LoginScreen> {
           'bookin': bookin,
           'bookout': bookout
         });
-        debugPrint("object 3");
+        debugPrint("object 2");
         hasilJson = jsonEncode(temporaryList2);
 
         debugPrint(hasilJson);
-        debugPrint("object_hasilJson 3");
+        debugPrint("object_hasilJson 2");
       }
       Future.delayed(const Duration(seconds: 5), () {
         if (hasil_result.isEmpty) {

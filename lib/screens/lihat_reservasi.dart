@@ -63,7 +63,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
   TextEditingController vidx = TextEditingController();
 
   void updateData3(String destination, String idpegawai) async {
-    final temporaryList4 = [];
+    final temporaryList3_1 = [];
     String idpegawai = data[0]['idemployee'];
     data3.clear();
 
@@ -92,11 +92,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
     if (response.statusCode == 200) {
       final document = xml.XmlDocument.parse(response.body);
 
-      debugPrint("=================");
-      debugPrint(
-          "document.toXmlString : ${document.toXmlString(pretty: true, indent: '\t')}");
-      debugPrint("=================");
-
       final listResultAll4 = document.findAllElements('_x002D_');
 
       for (final list_result in listResultAll4) {
@@ -110,7 +105,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         final bookin = list_result.findElements('BOOKIN').first.text;
         final bookout = list_result.findElements('BOOKOUT').first.text;
         if (docstate == "VOID") {
-          temporaryList4.add({
+          temporaryList3_1.add({
             'idx': idx,
             'docstate': docstate,
             'idkamar': idkamar,
@@ -124,7 +119,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         } else {
           final checkin = list_result.findElements('CHECKIN').first.text;
           final checkout = list_result.findElements('CHECKOUT').first.text;
-          temporaryList4.add({
+          temporaryList3_1.add({
             'idx': idx,
             'docstate': docstate,
             'idkamar': idkamar,
@@ -139,7 +134,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
           });
         }
         debugPrint("object 3.1");
-        hasilJson = jsonEncode(temporaryList4);
+        hasilJson = jsonEncode(temporaryList3_1);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 3.1");
@@ -176,14 +171,14 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
       });
     }
     setState(() {
-      dataBaru3 = temporaryList4;
+      dataBaru3 = temporaryList3_1;
       loading = true;
       // debugPrint('$dataBaru3');
     });
   }
 
   void getReport(String destination, String vidx, index) async {
-    final temporaryList5 = [];
+    final temporaryList4 = [];
     vidx = data3[index]['idx'];
     String bookin = data3[index]['bookin'];
     String bookout = data3[index]['bookout'];
@@ -228,7 +223,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         final resolution = list_result.findElements('RESOLUTION').first.text;
         final userinsert = list_result.findElements('USERINSERT').first.text;
         final status = list_result.findElements('STATUS').first.text;
-        temporaryList5.add({
+        temporaryList4.add({
           'idx': idx,
           'vidx': vidx,
           'date': date,
@@ -239,7 +234,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
           'status': status
         });
         debugPrint("object 4");
-        hasilJson = jsonEncode(temporaryList5);
+        hasilJson = jsonEncode(temporaryList4);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 4");
@@ -278,7 +273,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
       });
     }
     setState(() {
-      data4 = temporaryList5;
+      data4 = temporaryList4;
       vidxBaru = vidx;
       bookinBaru = bookin;
       bookoutBaru = bookout;
@@ -287,7 +282,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
   }
 
   void getRating(String vidx, index) async {
-    final temporaryList10 = [];
+    final temporaryList7 = [];
     vidx = data3[index]['idx'];
 
     String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -325,13 +320,13 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         final idx = list_result.findElements('IDX').first.text;
         final name = list_result.findElements('NAME').first.text;
         final rating = list_result.findElements('RATING').first.text;
-        temporaryList10.add({
+        temporaryList7.add({
           'idx': idx,
           'rating': rating,
           'name': name,
         });
         debugPrint("object 10");
-        hasilJson = jsonEncode(temporaryList10);
+        hasilJson = jsonEncode(temporaryList7);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 10");
@@ -384,12 +379,12 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                         },
                       ),
                     ],
-                    content: Column(
+                    content: const Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Column(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text("You have rated us"),
                             Text("Want to update your Rating?"),
                           ],
@@ -419,7 +414,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
       });
     }
     setState(() {
-      data7 = temporaryList10;
+      data7 = temporaryList7;
       loading2 = true;
     });
   }
@@ -534,20 +529,20 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                           ),
                           Row(
                             children: [
-                              Column(
+                              const Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(children: const [
+                                    Row(children: [
                                       Text("Area"),
                                     ]),
-                                    Row(children: const [
+                                    Row(children: [
                                       Text("Block"),
                                     ]),
-                                    Row(children: const [
+                                    Row(children: [
                                       Text("Number"),
                                     ]),
                                     Row(
-                                      children: const [
+                                      children: [
                                         Text("Bed"),
                                       ],
                                     ),
@@ -645,20 +640,20 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                           ),
                           Row(
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(children: const [
+                                  Row(children: [
                                     Text("Book-In"),
                                   ]),
-                                  Row(children: const [
+                                  Row(children: [
                                     Text("Book-Out"),
                                   ]),
-                                  Row(children: const [
+                                  Row(children: [
                                     Text("Check-In"),
                                   ]),
                                   Row(
-                                    children: const [
+                                    children: [
                                       Text("Check-Out"),
                                     ],
                                   ),
@@ -739,10 +734,10 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                                 BorderRadius.circular(3),
                                             border:
                                                 Border.all(color: Colors.red)),
-                                        child: Column(
+                                        child: const Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: const [
+                                          children: [
                                             Text(
                                               "VOID",
                                               style: TextStyle(

@@ -1,6 +1,7 @@
-// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously, non_constant_identifier_names
 
 import "dart:async";
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 import 'package:lionair_2/screens/laporan.dart';
@@ -64,6 +65,7 @@ class _InputLaporanState extends State<InputLaporan> {
   List data3 = [];
   List data4 = [];
   List result = [];
+  var hasilJson;
   var vidx4;
   var bookin3;
   var bookout3;
@@ -84,18 +86,6 @@ class _InputLaporanState extends State<InputLaporan> {
   final TextEditingController vidx = TextEditingController();
   final TextEditingController description = TextEditingController();
   final TextEditingController destination = TextEditingController();
-
-  Future pickDate() async {
-    final DateTime? newDate = await showDatePicker(
-      context: context,
-      initialDate: selectDate,
-      firstDate: DateTime.parse(bookin3).toLocal(),
-      lastDate: DateTime.parse(bookout3).toLocal().add(const Duration(days: 7)),
-    );
-    if (newDate == null) return; //for button X
-
-    setState(() => selectDate = newDate); //for button SAVE
-  }
 
   DropdownMenuItem<String> buildmenuItem(String item) => DropdownMenuItem(
         value: item,
@@ -138,7 +128,85 @@ class _InputLaporanState extends State<InputLaporan> {
       final parsedResponse = xml.XmlDocument.parse(responseBody);
       final result = parsedResponse.findAllElements('_x002D_').single.text;
       debugPrint('Result: $result');
-      Future.delayed(const Duration(seconds: 1), () {
+    } else {
+      debugPrint('Error: ${response.statusCode}');
+      StatusAlert.show(
+        context,
+        duration: const Duration(seconds: 1),
+        configuration:
+            const IconConfiguration(icon: Icons.error, color: Colors.red),
+        title: "Input Data4 Failed, ${response.statusCode}",
+        backgroundColor: Colors.grey[300],
+      );
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  void updateData4(String destination, String vidx) async {
+    final temporaryList4_1 = [];
+    vidx = vidx4;
+    data4.clear();
+
+    String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+        '<soap:Body>' +
+        '<TenantReport_GetDataVIDX xmlns="http://tempuri.org/">' +
+        '<UsernameAPI>$userapi</UsernameAPI>' +
+        '<PasswordAPI>$passapi</PasswordAPI>' +
+        '<Destination>BLJ</Destination>' +
+        '<VIDX>$vidx</VIDX>' +
+        '</TenantReport_GetDataVIDX>' +
+        '</soap:Body>' +
+        '</soap:Envelope>';
+
+    final response = await http.post(Uri.parse(url_TenantReport_GetDataVIDX),
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'SOAPAction': 'http://tempuri.org/TenantReport_GetDataVIDX',
+          "Access-Control-Allow-Credentials": "true",
+          'Content-type': 'text/xml; charset=utf-8',
+        },
+        body: objBody);
+
+    if (response.statusCode == 200) {
+      final document = xml.XmlDocument.parse(response.body);
+
+      // debugPrint("=================");
+      // debugPrint(
+      //     "document.toXmlString : ${document.toXmlString(pretty: true, indent: '\t')}");
+      // debugPrint("=================");
+
+      final list_result_all6 = document.findAllElements('_x002D_');
+
+      for (final list_result in list_result_all6) {
+        final idx = list_result.findElements('IDX').first.text;
+        final vidx = list_result.findElements('VIDX').first.text;
+        final date = list_result.findElements('DATE').first.text;
+        final category = list_result.findElements('CATEGORY').first.text;
+        final description = list_result.findElements('DESCRIPTION').first.text;
+        final resolution = list_result.findElements('RESOLUTION').first.text;
+        final userinsert = list_result.findElements('USERINSERT').first.text;
+        final status = list_result.findElements('STATUS').first.text;
+        temporaryList4_1.add({
+          'idx': idx,
+          'vidx': vidx,
+          'date': date,
+          'category': category,
+          'description': description,
+          'resolution': resolution,
+          'userinsert': userinsert,
+          'status': status
+        });
+        debugPrint("object 6");
+        hasilJson = jsonEncode(temporaryList4_1);
+
+        debugPrint(hasilJson);
+        debugPrint("object_hasilJson 6");
+      }
+
+      Future.delayed(const Duration(seconds: 3), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:
@@ -170,13 +238,18 @@ class _InputLaporanState extends State<InputLaporan> {
         duration: const Duration(seconds: 1),
         configuration:
             const IconConfiguration(icon: Icons.error, color: Colors.red),
-        title: "Input Data4 Failed, ${response.statusCode}",
+        title: "Update4 Failed, ${response.statusCode}",
         backgroundColor: Colors.grey[300],
       );
       setState(() {
         loading = false;
       });
     }
+    setState(() {
+      data4 = temporaryList4_1;
+      loading = true;
+      // debugPrint('$dataBaru4');
+    });
   }
 
   @override
@@ -227,16 +300,6 @@ class _InputLaporanState extends State<InputLaporan> {
                                   MediaQuery.of(context).textScaleFactor * 20),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        pickDate();
-                      },
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      label: const Text(
-                        "Choose",
-                      ),
                     ),
                     const SizedBox(height: 30),
                     const Text(
@@ -335,6 +398,9 @@ class _InputLaporanState extends State<InputLaporan> {
                                   loading = true;
                                 });
                                 _addReport(vidx.text, description.text);
+                                Future.delayed(const Duration(seconds: 1), () {
+                                  updateData4(destination.text, vidx.text);
+                                });
                               }
                             },
                       child: loading

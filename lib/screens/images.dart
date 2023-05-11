@@ -82,7 +82,7 @@ class _Lihatgambarstate extends State<Lihatgambar> {
   TextEditingController idfile = TextEditingController();
 
   void updateData5(String idreff) async {
-    final temporaryList8 = [];
+    final temporaryList5_1 = [];
     idreff = idreff5;
     data5.clear();
 
@@ -120,15 +120,15 @@ class _Lihatgambarstate extends State<Lihatgambar> {
       for (final list_result in list_result_all8) {
         final idfile = list_result.findElements('IDFILE').first.text;
         final filename = list_result.findElements('FILENAME').first.text;
-        temporaryList8.add({
+        temporaryList5_1.add({
           'idfile': idfile,
           'filename': filename,
         });
-        debugPrint("object 7.1");
-        hasilJson = jsonEncode(temporaryList8);
+        debugPrint("object 5.1");
+        hasilJson = jsonEncode(temporaryList5_1);
 
         debugPrint(hasilJson);
-        debugPrint("object_hasilJson 7.1");
+        debugPrint("object_hasilJson 5.1");
       }
 
       Future.delayed(const Duration(seconds: 3), () {
@@ -163,14 +163,14 @@ class _Lihatgambarstate extends State<Lihatgambar> {
       });
     }
     setState(() {
-      dataBaru5 = temporaryList8;
+      dataBaru5 = temporaryList5_1;
       loading = true;
       // debugPrint('$dataBaru4');
     });
   }
 
   void getImage(String idfile, index) async {
-    final temporaryList9 = [];
+    final temporaryList6 = [];
     idfile = data5[index]['idfile'];
 
     String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -208,13 +208,13 @@ class _Lihatgambarstate extends State<Lihatgambar> {
         final idfile = list_result.findElements('IDFile').first.text;
         final idref = list_result.findElements('IDRef').first.text;
         final filebyte = list_result.findElements('Filebyte').first.text;
-        temporaryList9.add({
+        temporaryList6.add({
           'idfile': idfile,
           'idref': idref,
           'filebyte': filebyte,
         });
         debugPrint("object 8");
-        hasilJson = jsonEncode(temporaryList9);
+        hasilJson = jsonEncode(temporaryList6);
 
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 8");
@@ -278,7 +278,7 @@ class _Lihatgambarstate extends State<Lihatgambar> {
       });
     }
     setState(() {
-      data6 = temporaryList9;
+      data6 = temporaryList6;
       loading1 = true;
       // debugPrint('$dataBaru4');
     });
