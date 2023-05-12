@@ -332,7 +332,76 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
         debugPrint("object_hasilJson 10");
       }
       Future.delayed(const Duration(seconds: 1), () {
-        if (double.parse(data7[index]['rating']) == 0) {
+        if (data7.isNotEmpty) {
+          if (double.parse(data7[index]['rating']) == 0) {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => LihatRating(
+                userapi: userapi,
+                passapi: passapi,
+                data: data,
+                data1: data1,
+                data2: data2,
+                data3: data3,
+                data7: data7,
+              ),
+            ));
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return WillPopScope(
+                    onWillPop: () async {
+                      return false;
+                    },
+                    child: AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0)),
+                      icon: Icon(
+                        Icons.error_outline,
+                        color: Colors.amber,
+                        size: MediaQuery.of(context).size.height * 0.1,
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text("Yes"),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => LihatRating(
+                                userapi: userapi,
+                                passapi: passapi,
+                                data: data,
+                                data1: data1,
+                                data2: data2,
+                                data3: data3,
+                                data7: data7,
+                              ),
+                            ));
+                          },
+                        ),
+                        TextButton(
+                          child: const Text("No"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                      content: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text("You have rated us"),
+                              Text("Want to update your Rating?"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
+        } else {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => LihatRating(
               userapi: userapi,
@@ -344,56 +413,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
               data7: data7,
             ),
           ));
-        } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return WillPopScope(
-                  onWillPop: () async {
-                    return false;
-                  },
-                  child: AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0)),
-                    actions: [
-                      TextButton(
-                        child: const Text("Yes"),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LihatRating(
-                              userapi: userapi,
-                              passapi: passapi,
-                              data: data,
-                              data1: data1,
-                              data2: data2,
-                              data3: data3,
-                              data7: data7,
-                            ),
-                          ));
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("No"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                    content: const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Text("You have rated us"),
-                            Text("Want to update your Rating?"),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
         }
         setState(() {
           loading2 = false;
@@ -468,270 +487,265 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              key: _formKey,
-              itemCount: data3.length,
-              itemBuilder: (context, index) {
-                if (data3.isEmpty) {
-                  return const Center(child: Text("No Data"));
-                } else {
-                  return Card(
-                    margin: const EdgeInsets.all(8),
-                    elevation: 8,
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Container(
-                            color: Colors.black12,
-                            height: 45,
-                            child: Row(children: [
-                              GestureDetector(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "${data3[index]['idx']} ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .textScaleFactor *
-                                              18),
-                                    ),
-                                    const Icon(
-                                      Icons.copy_rounded,
-                                      color: Colors.black38,
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  FlutterClipboard.copy(
-                                      '${data3[index]['idx']}'); // copy teks ke clipboard
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Reservation ID copied!'),
-                                    ),
-                                  );
-                                },
-                              ),
-                              const Spacer(
-                                flex: 1,
-                              ),
-                              Text(
-                                "${data3[index]['idkamar']}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ]),
-                          ),
-                          const Divider(
-                            thickness: 2,
-                          ),
-                          Row(
-                            children: [
-                              const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
-                                      Text("Area"),
-                                    ]),
-                                    Row(children: [
-                                      Text("Block"),
-                                    ]),
-                                    Row(children: [
-                                      Text("Number"),
-                                    ]),
-                                    Row(
-                                      children: [
-                                        Text("Bed"),
-                                      ],
-                                    ),
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
+          : data3.isEmpty
+              ? Container(
+                  alignment: Alignment.topCenter,
+                  child: const Text("No Data"),
+                )
+              : ListView.builder(
+                  key: _formKey,
+                  itemCount: data3.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      margin: const EdgeInsets.all(8),
+                      elevation: 8,
+                      child: Container(
+                        margin: const EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              color: Colors.black12,
+                              height: 45,
+                              child: Row(children: [
+                                GestureDetector(
+                                  child: Row(
+                                    children: [
                                       Text(
-                                        " ${data3[index]['areamess']}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .textScaleFactor *
-                                              13,
-                                        ),
-                                      )
-                                    ]),
-                                    Row(children: [
-                                      Text(
-                                        " ${data3[index]['blok']}",
+                                        "${data3[index]['idx']} ",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: MediaQuery.of(context)
                                                     .textScaleFactor *
-                                                13),
+                                                18),
+                                      ),
+                                      const Icon(
+                                        Icons.copy_rounded,
+                                        color: Colors.black38,
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    FlutterClipboard.copy(
+                                        '${data3[index]['idx']}'); // copy teks ke clipboard
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Reservation ID copied!'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const Spacer(
+                                  flex: 1,
+                                ),
+                                Text(
+                                  "${data3[index]['idkamar']}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ]),
+                            ),
+                            const Divider(
+                              thickness: 2,
+                            ),
+                            Row(
+                              children: [
+                                const Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(children: [
+                                        Text("Area"),
+                                      ]),
+                                      Row(children: [
+                                        Text("Block"),
+                                      ]),
+                                      Row(children: [
+                                        Text("Number"),
+                                      ]),
+                                      Row(
+                                        children: [
+                                          Text("Bed"),
+                                        ],
                                       ),
                                     ]),
-                                    Row(children: [
-                                      Text(
-                                        " ${data3[index]['nokamar']}",
-                                        style: TextStyle(
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(children: [
+                                        Text(
+                                          " ${data3[index]['areamess']}",
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: MediaQuery.of(context)
                                                     .textScaleFactor *
-                                                13),
-                                      )
-                                    ]),
-                                    Row(
-                                      children: [
+                                                13,
+                                          ),
+                                        )
+                                      ]),
+                                      Row(children: [
                                         Text(
-                                          " ${data3[index]['namabed']}",
+                                          " ${data3[index]['blok']}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: MediaQuery.of(context)
                                                       .textScaleFactor *
                                                   13),
                                         ),
-                                      ],
-                                    )
-                                  ]),
-                              const Spacer(
-                                flex: 1,
-                              ),
-                              data3[index]['docstate'] == "VOID"
-                                  ? Padding(
-                                      padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.015),
-                                      child: Container(
-                                        width: 80,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(3),
-                                            border:
-                                                Border.all(color: Colors.red)),
-                                        child: const Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                      ]),
+                                      Row(children: [
+                                        Text(
+                                          " ${data3[index]['nokamar']}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: MediaQuery.of(context)
+                                                      .textScaleFactor *
+                                                  13),
+                                        )
+                                      ]),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            " ${data3[index]['namabed']}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: MediaQuery.of(context)
+                                                        .textScaleFactor *
+                                                    13),
+                                          ),
+                                        ],
+                                      )
+                                    ]),
+                                const Spacer(
+                                  flex: 1,
+                                ),
+                                data3[index]['docstate'] == "VOID"
+                                    ? Padding(
+                                        padding: EdgeInsets.all(
+                                            MediaQuery.of(context).size.width *
+                                                0.015),
+                                        child: Container(
+                                          width: 80,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              border: Border.all(
+                                                  color: Colors.red)),
+                                          child: const Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "VOID",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        // height: 48,
+                                        // width: 95,
+                                        padding: EdgeInsets.only(
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.035),
+                                        child: Column(
                                           children: [
-                                            Text(
-                                              "VOID",
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.bold),
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    IconButton(
+                                                      iconSize: 50,
+                                                      icon: loading2
+                                                          ? const CircularProgressIndicator()
+                                                          : const Icon(Icons
+                                                              .sentiment_neutral_outlined),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              176,
+                                                              176,
+                                                              171),
+                                                      onPressed: loading2
+                                                          ? null
+                                                          : () async {
+                                                              setState(() {
+                                                                loading2 = true;
+                                                              });
+                                                              getRating(
+                                                                  vidx.text,
+                                                                  index);
+                                                            },
+                                                    ),
+                                                    const Text("Rate Us"),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                    )
-                                  : Padding(
-                                      // height: 48,
-                                      // width: 95,
-                                      padding: EdgeInsets.only(
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.035),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  IconButton(
-                                                    iconSize: 50,
-                                                    icon: loading2
-                                                        ? const CircularProgressIndicator()
-                                                        : const Icon(Icons
-                                                            .sentiment_neutral_outlined),
-                                                    color: const Color.fromARGB(
-                                                        255, 176, 176, 171),
-                                                    onPressed: loading2
-                                                        ? null
-                                                        : () async {
-                                                            setState(() {
-                                                              loading2 = true;
-                                                            });
-                                                            getRating(vidx.text,
-                                                                index);
-                                                          },
-                                                  ),
-                                                  const Text("Rate Us"),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                              ],
+                            ),
+                            const Divider(
+                              thickness: 2,
+                            ),
+                            Row(
+                              children: [
+                                const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      Text("Book-In"),
+                                    ]),
+                                    Row(children: [
+                                      Text("Book-Out"),
+                                    ]),
+                                    Row(children: [
+                                      Text("Check-In"),
+                                    ]),
+                                    Row(
+                                      children: [
+                                        Text("Check-Out"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      Text(
+                                        DateFormat(' : MMM dd, yyyy').format(
+                                            DateTime.parse(
+                                                    data3[index]['bookin'])
+                                                .toLocal()),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                            ],
-                          ),
-                          const Divider(
-                            thickness: 2,
-                          ),
-                          Row(
-                            children: [
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(children: [
-                                    Text("Book-In"),
-                                  ]),
-                                  Row(children: [
-                                    Text("Book-Out"),
-                                  ]),
-                                  Row(children: [
-                                    Text("Check-In"),
-                                  ]),
-                                  Row(
-                                    children: [
-                                      Text("Check-Out"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(children: [
-                                    Text(
-                                      DateFormat(' : MMM dd, yyyy').format(
-                                          DateTime.parse(data3[index]['bookin'])
-                                              .toLocal()),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ]),
-                                  Row(children: [
-                                    Text(
-                                      DateFormat(' : MMM dd, yyyy').format(
-                                          DateTime.parse(
-                                                  data3[index]['bookout'])
-                                              .toLocal()),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ]),
-                                  Row(children: [
-                                    data3[index]['checkin'] == null
-                                        ? const Text(
-                                            " : NULL",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        : Text(
-                                            DateFormat(' : MMM dd, yyyy')
-                                                .format(DateTime.parse(
-                                                        data3[index]['checkin'])
-                                                    .toLocal()),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                  ]),
-                                  Row(
-                                    children: [
-                                      data3[index]['checkout'] == null
+                                    ]),
+                                    Row(children: [
+                                      Text(
+                                        DateFormat(' : MMM dd, yyyy').format(
+                                            DateTime.parse(
+                                                    data3[index]['bookout'])
+                                                .toLocal()),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ]),
+                                    Row(children: [
+                                      data3[index]['checkin'] == null
                                           ? const Text(
                                               " : NULL",
                                               style: TextStyle(
@@ -741,24 +755,43 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                                               DateFormat(' : MMM dd, yyyy')
                                                   .format(DateTime.parse(
                                                           data3[index]
-                                                              ['checkout'])
+                                                              ['checkin'])
                                                       .toLocal()),
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                    ]),
+                                    Row(
+                                      children: [
+                                        data3[index]['checkout'] == null
+                                            ? const Text(
+                                                " : NULL",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : Text(
+                                                DateFormat(' : MMM dd, yyyy')
+                                                    .format(DateTime.parse(
+                                                            data3[index]
+                                                                ['checkout'])
+                                                        .toLocal()),
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
-            ),
+                    );
+                  },
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(

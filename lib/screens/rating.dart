@@ -140,79 +140,75 @@ class _LihatRatingState extends State<LihatRating> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: Center(
-        child: loading
-            ? const CircularProgressIndicator()
-            : ListView.builder(
-                key: _formKey,
-                itemCount: data7.length,
-                itemBuilder: (context, index) {
-                  if (data3.isEmpty) {
-                    return const Center(child: Text("No Data"));
-                  } else {
-                    return Card(
-                      margin: const EdgeInsets.all(8),
-                      elevation: 8,
-                      child: Container(
-                        margin: const EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text(
-                              '${data7[index]['name']}',
-                            ),
-                            RatingBar.builder(
-                              initialRating:
-                                  double.parse(data7[index]['rating']),
-                              itemCount: 5,
-                              itemBuilder: (context, index) {
-                                switch (index) {
-                                  case 0:
-                                    return const Icon(
-                                      Icons.sentiment_very_dissatisfied,
-                                      color: Colors.red,
-                                    );
-
-                                  case 1:
-                                    return const Icon(
-                                      Icons.sentiment_dissatisfied,
-                                      color: Colors.orange,
-                                    );
-                                  case 2:
-                                    return const Icon(
-                                      Icons.sentiment_neutral,
-                                      color: Colors.amber,
-                                    );
-                                  case 3:
-                                    return const Icon(
-                                      Icons.sentiment_satisfied,
-                                      color: Colors.lightGreen,
-                                    );
-                                  case 4:
-                                    return const Icon(
-                                      Icons.sentiment_very_satisfied,
-                                      color: Colors.green,
-                                    );
-                                  default:
-                                    return Container();
-                                }
-                              },
-                              onRatingUpdate: (rating) {
-                                setState(() {
-                                  ratingBaru = rating;
-                                  // print(rating);
-                                });
-                                updateRating(_rating.text, index);
-                              },
-                            ),
-                          ],
+      body: data7.isEmpty
+          ? Container(
+              alignment: Alignment.topCenter,
+              child: const Text("Still on Progress"),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              key: _formKey,
+              itemCount: data7.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  elevation: 8,
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          '${data7[index]['name']}',
                         ),
-                      ),
-                    );
-                  }
-                },
-              ),
-      ),
+                        RatingBar.builder(
+                          initialRating: double.parse(data7[index]['rating']),
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            switch (index) {
+                              case 0:
+                                return const Icon(
+                                  Icons.sentiment_very_dissatisfied,
+                                  color: Colors.red,
+                                );
+
+                              case 1:
+                                return const Icon(
+                                  Icons.sentiment_dissatisfied,
+                                  color: Colors.orange,
+                                );
+                              case 2:
+                                return const Icon(
+                                  Icons.sentiment_neutral,
+                                  color: Colors.amber,
+                                );
+                              case 3:
+                                return const Icon(
+                                  Icons.sentiment_satisfied,
+                                  color: Colors.lightGreen,
+                                );
+                              case 4:
+                                return const Icon(
+                                  Icons.sentiment_very_satisfied,
+                                  color: Colors.green,
+                                );
+                              default:
+                                return Container();
+                            }
+                          },
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              ratingBaru = rating;
+                              // print(rating);
+                            });
+                            updateRating(_rating.text, index);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
     );
   }
 }

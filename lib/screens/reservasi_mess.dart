@@ -203,7 +203,7 @@ class _ReservasiMessState extends State<ReservasiMess> {
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 1.1");
       }
-      Future.delayed(const Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 3), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:

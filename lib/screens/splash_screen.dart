@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 6),
+    Timer(const Duration(milliseconds: 1200),
         () => Navigator.pushReplacementNamed(context, 'login'));
   }
 
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
               radius: 40.0,
               lineWidth: 5.0,
               percent: 1.0,
-              animationDuration: 5700,
+              animationDuration: 900,
               center: const Text(
                 "loading",
                 style: TextStyle(

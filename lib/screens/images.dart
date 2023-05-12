@@ -328,49 +328,51 @@ class _Lihatgambarstate extends State<Lihatgambar> {
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              shrinkWrap: true,
-              key: _formKey,
-              itemCount: data5.length,
-              itemBuilder: (context, index) {
-                if (data5.isEmpty) {
-                  return const Center(child: Text("No Data"));
-                } else {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        margin: const EdgeInsets.all(8),
-                        elevation: 8,
-                        child: Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Center(
-                                child: loading1
-                                    ? const CircularProgressIndicator()
-                                    : IconButton(
-                                        onPressed: loading1
-                                            ? null
-                                            : () async {
-                                                setState(() {
-                                                  loading1 = true;
-                                                });
-                                                getImage(idfile.text, index);
-                                              },
-                                        icon: const Icon(Icons.zoom_in)),
-                              ),
-                              Center(child: Text("${data5[index]['filename']}"))
-                            ],
+          : data5.isEmpty
+              ? Container(
+                  alignment: Alignment.topCenter,
+                  child: const Text("No Data"),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  key: _formKey,
+                  itemCount: data5.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          elevation: 8,
+                          child: Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: loading1
+                                      ? const CircularProgressIndicator()
+                                      : IconButton(
+                                          onPressed: loading1
+                                              ? null
+                                              : () async {
+                                                  setState(() {
+                                                    loading1 = true;
+                                                  });
+                                                  getImage(idfile.text, index);
+                                                },
+                                          icon: const Icon(Icons.zoom_in)),
+                                ),
+                                Center(
+                                    child: Text("${data5[index]['filename']}"))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }
-              },
-            ),
+                    );
+                  },
+                ),
     );
   }
 }

@@ -206,7 +206,7 @@ class _InputLaporanState extends State<InputLaporan> {
         debugPrint("object_hasilJson 6");
       }
 
-      Future.delayed(const Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 3), () {
         StatusAlert.show(context,
             duration: const Duration(seconds: 1),
             configuration:
@@ -371,6 +371,7 @@ class _InputLaporanState extends State<InputLaporan> {
                     const SizedBox(height: 30),
                     TextField(
                       controller: description,
+                      maxLength: 85,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: const InputDecoration(
