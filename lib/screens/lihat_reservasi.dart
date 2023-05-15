@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lionair_2/screens/rating.dart';
 import 'package:status_alert/status_alert.dart';
+import 'home_screen.dart';
 import 'laporan.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
@@ -469,7 +470,15 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             data3.clear();
-            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                userapi: userapi,
+                passapi: passapi,
+                data: data,
+                data1: data1,
+                data2: data2,
+              ),
+            ));
           },
         ),
         title: const Text("Reservation History"),

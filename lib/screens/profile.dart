@@ -4,6 +4,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:lionair_2/screens/uppass.dart';
 
+import 'home_screen.dart';
+
 class UserProfile extends StatefulWidget {
   var userapi;
   var passapi;
@@ -66,7 +68,17 @@ class _UserProfileState extends State<UserProfile> {
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                    userapi: userapi,
+                    passapi: passapi,
+                    data: data,
+                    data1: data1,
+                    data2: data2),
+              ),
+            );
           },
         ),
         title: const Text("User Profile"),
@@ -206,44 +218,46 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ),
                     Center(
-                      child: MaterialButton(
-                        color: Colors.red,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        disabledColor: Colors.grey,
-                        onPressed: loading
-                            ? null
-                            : () {
-                                setState(() {
-                                  loading = true;
-                                });
-                                Future.delayed(const Duration(seconds: 1), () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => UpdatePassword(
-                                      userapi: userapi,
-                                      passapi: passapi,
-                                      data: data,
-                                      data1: data1,
-                                      data2: data2,
-                                    ),
-                                  ));
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                });
-                              },
-                        child: loading
-                            ? const SizedBox(
-                                height: 28,
-                                width: 30,
-                                child: CircularProgressIndicator())
-                            : Container(
+                      child: loading
+                          ? const SizedBox(
+                              height: 28,
+                              width: 30,
+                              child: CircularProgressIndicator())
+                          : MaterialButton(
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              disabledColor: Colors.grey,
+                              onPressed: loading
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      Future.delayed(const Duration(seconds: 1),
+                                          () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => UpdatePassword(
+                                            userapi: userapi,
+                                            passapi: passapi,
+                                            data: data,
+                                            data1: data1,
+                                            data2: data2,
+                                          ),
+                                        ));
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                      });
+                                    },
+                              child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 15),
                                 child: const Text('Update Password',
                                     style: TextStyle(color: Colors.white)),
                               ),
-                      ),
+                            ),
                     )
                   ],
                 );

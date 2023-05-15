@@ -10,6 +10,7 @@ import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
+import 'home_screen.dart';
 import 'input_laporan.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:image_picker/image_picker.dart';
@@ -286,7 +287,15 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
             vidx4 = '';
             bookin3 = '';
             bookout3 = '';
-            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                userapi: userapi,
+                passapi: passapi,
+                data: data,
+                data1: data1,
+                data2: data2,
+              ),
+            ));
           },
         ),
         title: const Text("Complaint"),
