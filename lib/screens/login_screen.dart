@@ -11,6 +11,7 @@ import 'package:xml2json/xml2json.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:status_alert/status_alert.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:connectivity/connectivity.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool loading = false;
+  bool _isConnected = true;
+
   List hasil_result = [];
   List hasil_result1 = [];
   List hasil_result2 = [];
@@ -98,7 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint(hasilJson);
         debugPrint("object_hasilJson");
       }
-      loading = false;
+      setState(() {
+        loading = false;
+      });
     } else {
       debugPrint('Error: ${response.statusCode}');
       StatusAlert.show(
@@ -175,7 +180,9 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 1");
       }
-      loading = false;
+      setState(() {
+        loading = false;
+      });
     } else {
       debugPrint('Error: ${response.statusCode}');
       StatusAlert.show(
@@ -257,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
         debugPrint(hasilJson);
         debugPrint("object_hasilJson 2");
       }
-      Future.delayed(const Duration(seconds: 5), () {
+      await Future.delayed(const Duration(seconds: 1), () {
         if (hasil_result.isEmpty) {
           sweatAlertDenied(context);
         } else {
@@ -329,6 +336,16 @@ class _LoginScreenState extends State<LoginScreen> {
   // }
 
   @override
+  void initState() {
+    super.initState();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
+
+  @override
   void dispose() {
     idpegawai.dispose();
     password.dispose();
@@ -340,24 +357,34 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/logo.png'),
-                ),
+      body: !_isConnected
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('No Internet Connection,'),
+                  Text('Please Check Your Connection!!'),
+                ],
               ),
+            )
+          : SizedBox(
               width: double.infinity,
-              height: size.height * 0.4,
+              height: double.infinity,
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/logo.png'),
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: size.height * 0.4,
+                  ),
+                  loginForm(context),
+                ],
+              ),
             ),
-            loginForm(context),
-          ],
-        ),
-      ),
     );
   }
 
@@ -445,9 +472,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                         loading = true;
                                       });
                                       _cekUser(idpegawai.text, password.text);
-                                      getData(destination.text, idpegawai.text);
-                                      getReservation(
-                                          destination.text, idpegawai.text);
+                                      await Future.delayed(
+                                          const Duration(seconds: 1), () {
+                                        getData(
+                                            destination.text, idpegawai.text);
+                                      });
+                                      await Future.delayed(
+                                          const Duration(seconds: 1), () {
+                                        getReservation(
+                                            destination.text, idpegawai.text);
+                                      });
+                                      Future.delayed(const Duration(seconds: 1),
+                                          () {
+                                        loading == true
+                                            ? setState(() {
+                                                loading = false;
+                                              })
+                                            : null;
+                                      });
+
                                       // _showNotification();
                                     },
                               child: Container(

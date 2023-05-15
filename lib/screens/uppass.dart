@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:lionair_2/screens/profile.dart';
 import 'package:status_alert/status_alert.dart';
@@ -34,6 +35,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool _isConnected = true;
 
   List data = [];
   List data1 = [];
@@ -112,6 +114,16 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
+
+  @override
   void dispose() {
     newpass.dispose();
     renewpass.dispose();
@@ -132,124 +144,141 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Card(
-            margin: const EdgeInsets.all(15),
-            elevation: 8,
-            child: Container(
-              margin: const EdgeInsets.all(10),
+      body: !_isConnected
+          ? const Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  const SizedBox(height: 10),
-                  Form(
-                    key: _formKey,
-                    // autovalidateMode: AutovalidateMode.onUserInteraction,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('No Internet Connection,'),
+                  Text('Please Check Your Connection!!'),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: const EdgeInsets.all(15),
+                  elevation: 8,
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
                     child: Column(
-                      children: [
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          controller: newpass,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: '*****',
-                            labelText: 'New Password',
-                            icon: Icon(Icons.lock_outlined),
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        const SizedBox(height: 10),
+                        Form(
+                          key: _formKey,
+                          // autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                autocorrect: false,
+                                controller: newpass,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  hintText: '*****',
+                                  labelText: 'New Password',
+                                  icon: Icon(Icons.lock_outlined),
+                                ),
+                                //VALIDATOR Password
+                                validator: (value) {
+                                  return (value != null && value.length >= 3)
+                                      ? null
+                                      : 'Password must be greater than or equal to 3 characters';
+                                },
+                              ),
+                              const SizedBox(height: 30),
+                              TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                autocorrect: false,
+                                controller: renewpass,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  hintText: '*****',
+                                  labelText: 'Re-type Password',
+                                  icon: Icon(Icons.lock_reset),
+                                ),
+                                //VALIDATOR Password
+                                validator: (value) {
+                                  return (newpass.text == renewpass.text)
+                                      ? null
+                                      : "Password don't match, Please check again!!";
+                                },
+                              ),
+                              const SizedBox(height: 30),
+                              MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  disabledColor: Colors.grey,
+                                  color: Colors.red,
+                                  onPressed: loading
+                                      ? null
+                                      : () async {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          if (newpass.text != renewpass.text) {
+                                            StatusAlert.show(
+                                              context,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              configuration:
+                                                  const IconConfiguration(
+                                                      icon: Icons.error,
+                                                      color: Colors.red),
+                                              title: "Password don't match",
+                                              subtitle: "Please check again!!",
+                                              backgroundColor: Colors.grey[300],
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          } else if (newpass.text.isEmpty &&
+                                              renewpass.text.isEmpty) {
+                                            StatusAlert.show(
+                                              context,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              configuration:
+                                                  const IconConfiguration(
+                                                      icon: Icons.error,
+                                                      color: Colors.red),
+                                              title: "Password can't be empty",
+                                              subtitle: "Please check again!!",
+                                              backgroundColor: Colors.grey[300],
+                                            );
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          } else {
+                                            updatePass(newpass.text);
+                                          }
+                                        },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 80, vertical: 15),
+                                    child: loading
+                                        ? const SizedBox(
+                                            height: 28,
+                                            width: 30,
+                                            child: CircularProgressIndicator())
+                                        : const Text('Update',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                  )),
+                            ],
                           ),
-                          //VALIDATOR Password
-                          validator: (value) {
-                            return (value != null && value.length >= 3)
-                                ? null
-                                : 'Password must be greater than or equal to 3 characters';
-                          },
                         ),
-                        const SizedBox(height: 30),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          autocorrect: false,
-                          controller: renewpass,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: '*****',
-                            labelText: 'Re-type Password',
-                            icon: Icon(Icons.lock_reset),
-                          ),
-                          //VALIDATOR Password
-                          validator: (value) {
-                            return (newpass.text == renewpass.text)
-                                ? null
-                                : "Password don't match, Please check again!!";
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            disabledColor: Colors.grey,
-                            color: Colors.red,
-                            onPressed: loading
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    if (newpass.text != renewpass.text) {
-                                      StatusAlert.show(
-                                        context,
-                                        duration: const Duration(seconds: 1),
-                                        configuration: const IconConfiguration(
-                                            icon: Icons.error,
-                                            color: Colors.red),
-                                        title: "Password don't match",
-                                        subtitle: "Please check again!!",
-                                        backgroundColor: Colors.grey[300],
-                                      );
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else if (newpass.text.isEmpty &&
-                                        renewpass.text.isEmpty) {
-                                      StatusAlert.show(
-                                        context,
-                                        duration: const Duration(seconds: 1),
-                                        configuration: const IconConfiguration(
-                                            icon: Icons.error,
-                                            color: Colors.red),
-                                        title: "Password can't be empty",
-                                        subtitle: "Please check again!!",
-                                        backgroundColor: Colors.grey[300],
-                                      );
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else {
-                                      updatePass(newpass.text);
-                                    }
-                                  },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 80, vertical: 15),
-                              child: loading
-                                  ? const SizedBox(
-                                      height: 28,
-                                      width: 30,
-                                      child: CircularProgressIndicator())
-                                  : const Text('Update',
-                                      style: TextStyle(color: Colors.white)),
-                            )),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

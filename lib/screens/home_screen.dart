@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state, prefer_adjacent_string_concatenation, prefer_interpolation_to_compose_strings, non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lionair_2/screens/about.dart';
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loading2 = false;
   bool loading3 = false;
   bool loading4 = false;
+  bool _isConnected = true;
 
   List data = [];
   List data1 = [];
@@ -602,6 +604,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+
     phone.text = data[0]['phone'];
     _pageController = PageController(viewportFraction: 1.0);
 
@@ -627,19 +635,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.home, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
-          },
+        leading: const IconButton(
+          icon: Icon(Icons.home, color: Colors.white),
+          onPressed: null,
           tooltip: "Home Screen",
         ),
         title: const Text("Home Screen"),
@@ -735,1860 +733,1870 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: ListView.builder(
-        key: _formKey,
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          if (data1.isEmpty && data2.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                        ),
-                      ),
-                      width: double.infinity,
-                      height: size.height * 0.1,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: 350,
-                      height: 230,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            Text(
-                              "WELCOME",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).textScaleFactor *
-                                          20),
-                            ),
-                            const SizedBox(height: 20),
-                            Text("Name : ${data[index]['namaasli']}".trim()),
-                            const SizedBox(height: 5),
-                            Text(
-                                "Username : ${data[index]['username']}".trim()),
-                            const SizedBox(height: 5),
-                            Text("ID Employee : ${data[index]['idemployee']}"
-                                .trim()),
-                            const SizedBox(height: 10),
-                            Container(
-                              margin: const EdgeInsets.all(15),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading1
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReservasiMess(
-                                                    userapi: userapi,
-                                                    passapi: passapi,
-                                                    data: data,
-                                                    data1: data1,
-                                                    data2: data2,
-                                                  ),
-                                                ));
-                                                setState(() {
-                                                  loading1 = false;
-                                                });
-                                              });
-                                            },
-                                      child: loading1
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Mess Reservation",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                  const Spacer(
-                                    flex: 1,
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading2
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading2 = true;
-                                              });
-                                              getReserveHist(destination.text,
-                                                  idpegawai.text);
-                                            },
-                                      child: loading2
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Reservation History",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Pending Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: Center(
-                                  child: loading
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          "NO PENDING RESERVATION",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Current Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: Center(
-                                  child: loading
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          "NO CURRENT RESERVATION",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
+      body: !_isConnected
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('No Internet Connection,'),
+                  Text('Please Check Your Connection!!'),
+                ],
               ),
-            );
-          } else if (data1.isEmpty && data2.isNotEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                        ),
-                      ),
-                      width: double.infinity,
-                      height: size.height * 0.1,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: 350,
-                      height: 230,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            Text(
-                              "WELCOME",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).textScaleFactor *
-                                          20),
+            )
+          : ListView.builder(
+              key: _formKey,
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                if (data1.isEmpty && data2.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/logo.png'),
+                              ),
                             ),
-                            const SizedBox(height: 20),
-                            Text("Name : ${data[index]['namaasli']}".trim()),
-                            const SizedBox(height: 5),
-                            Text(
-                                "Username : ${data[index]['username']}".trim()),
-                            const SizedBox(height: 5),
-                            Text("ID Employee : ${data[index]['idemployee']}"
-                                .trim()),
-                            const SizedBox(height: 10),
-                            Container(
-                              margin: const EdgeInsets.all(15),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading1
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReservasiMess(
-                                                    userapi: userapi,
-                                                    passapi: passapi,
-                                                    data: data,
-                                                    data1: data1,
-                                                    data2: data2,
+                            width: double.infinity,
+                            height: size.height * 0.1,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 350,
+                            height: 230,
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 8.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "WELCOME",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: MediaQuery.of(context)
+                                                .textScaleFactor *
+                                            20),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text("Name : ${data[index]['namaasli']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text("Username : ${data[index]['username']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                      "ID Employee : ${data[index]['idemployee']}"
+                                          .trim()),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    margin: const EdgeInsets.all(15),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading1
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading1 = true;
+                                                    });
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReservasiMess(
+                                                          userapi: userapi,
+                                                          passapi: passapi,
+                                                          data: data,
+                                                          data1: data1,
+                                                          data2: data2,
+                                                        ),
+                                                      ));
+                                                      setState(() {
+                                                        loading1 = false;
+                                                      });
+                                                    });
+                                                  },
+                                            child: loading1
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Mess Reservation",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                ));
-                                                setState(() {
-                                                  loading1 = false;
-                                                });
-                                              });
-                                            },
-                                      child: loading1
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Mess Reservation",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        const Spacer(
+                                          flex: 1,
+                                        ),
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
                                             ),
-                                    ),
-                                  ),
-                                  const Spacer(
-                                    flex: 1,
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading2
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading2 = true;
-                                              });
-                                              getReserveHist(destination.text,
-                                                  idpegawai.text);
-                                            },
-                                      child: loading2
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Reservation History",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
+                                            onPressed: loading2
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading2 = true;
+                                                    });
+                                                    getReserveHist(
+                                                        destination.text,
+                                                        idpegawai.text);
+                                                  },
+                                            child: loading2
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Reservation History",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Pending Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: Center(
+                                        child: loading
+                                            ? const CircularProgressIndicator()
+                                            : const Text(
+                                                "NO PENDING RESERVATION",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Current Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: Center(
+                                        child: loading
+                                            ? const CircularProgressIndicator()
+                                            : const Text(
+                                                "NO CURRENT RESERVATION",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Pending Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: Center(
-                                  child: loading
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          "NO PENDING RESERVATION",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500),
-                                        )),
+                  );
+                } else if (data1.isEmpty && data2.isNotEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/logo.png'),
+                              ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Current Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: loading
-                                  ? const CircularProgressIndicator()
-                                  : ListView.builder(
-                                      itemCount: data2.length,
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          color: Colors.white,
-                                          elevation: 8.0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
+                            width: double.infinity,
+                            height: size.height * 0.1,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 350,
+                            height: 230,
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 8.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "WELCOME",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: MediaQuery.of(context)
+                                                .textScaleFactor *
+                                            20),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text("Name : ${data[index]['namaasli']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text("Username : ${data[index]['username']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                      "ID Employee : ${data[index]['idemployee']}"
+                                          .trim()),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    margin: const EdgeInsets.all(15),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading1
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading1 = true;
+                                                    });
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReservasiMess(
+                                                          userapi: userapi,
+                                                          passapi: passapi,
+                                                          data: data,
+                                                          data1: data1,
+                                                          data2: data2,
+                                                        ),
+                                                      ));
+                                                      setState(() {
+                                                        loading1 = false;
+                                                      });
+                                                    });
+                                                  },
+                                            child: loading1
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Mess Reservation",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                           ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  color: Colors.black12,
-                                                  height: 45,
-                                                  child: Row(children: [
-                                                    Text(
-                                                      "${data2[index]['idx']}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .textScaleFactor *
-                                                              18),
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Text(
-                                                      "${data2[index]['idkamar']}",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ]),
+                                        ),
+                                        const Spacer(
+                                          flex: 1,
+                                        ),
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading2
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading2 = true;
+                                                    });
+                                                    getReserveHist(
+                                                        destination.text,
+                                                        idpegawai.text);
+                                                  },
+                                            child: loading2
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Reservation History",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Pending Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: Center(
+                                        child: loading
+                                            ? const CircularProgressIndicator()
+                                            : const Text(
+                                                "NO PENDING RESERVATION",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Current Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: loading
+                                        ? const CircularProgressIndicator()
+                                        : ListView.builder(
+                                            itemCount: data2.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                color: Colors.white,
+                                                elevation: 8.0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
                                                 ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text("Area"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Block"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Number"),
-                                                          ]),
-                                                          Row(
-                                                            children: [
-                                                              Text("Bed"),
-                                                            ],
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        color: Colors.black12,
+                                                        height: 45,
+                                                        child: Row(children: [
+                                                          Text(
+                                                            "${data2[index]['idx']}",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .textScaleFactor *
+                                                                    18),
+                                                          ),
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Text(
+                                                            "${data2[index]['idkamar']}",
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                           ),
                                                         ]),
-                                                    Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
                                                         children: [
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['areamess']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            )
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['blok']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            ),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['nokamar']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            )
-                                                          ]),
-                                                          Row(
+                                                          const Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text("Area"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text("Block"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                      "Number"),
+                                                                ]),
+                                                                Row(
+                                                                  children: [
+                                                                    Text("Bed"),
+                                                                  ],
+                                                                ),
+                                                              ]),
+                                                          Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['areamess']}",
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            MediaQuery.of(context).textScaleFactor *
+                                                                                12),
+                                                                  )
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['blok']}",
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            MediaQuery.of(context).textScaleFactor *
+                                                                                12),
+                                                                  ),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['nokamar']}",
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            MediaQuery.of(context).textScaleFactor *
+                                                                                12),
+                                                                  )
+                                                                ]),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      " ${data2[index]['namabed']}",
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              MediaQuery.of(context).textScaleFactor * 12),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ]),
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Column(
                                                             children: [
-                                                              Text(
-                                                                " ${data2[index]['namabed']}",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        MediaQuery.of(context).textScaleFactor *
-                                                                            12),
+                                                              SizedBox(
+                                                                height: 35,
+                                                                width: 95,
+                                                                child:
+                                                                    ElevatedButton(
+                                                                  onPressed:
+                                                                      loading3
+                                                                          ? null
+                                                                          : () async {
+                                                                              setState(() {
+                                                                                loading3 = true;
+                                                                              });
+                                                                              getReport(destination.text, vidx.text, index);
+                                                                            },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .redAccent,
+                                                                  ),
+                                                                  child:
+                                                                      loading3
+                                                                          ? const SizedBox(
+                                                                              height: 28,
+                                                                              width: 30,
+                                                                              child: CircularProgressIndicator())
+                                                                          : Text(
+                                                                              "COMPLAINT",
+                                                                              style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 11),
+                                                                            ),
+                                                                ),
                                                               ),
                                                             ],
                                                           )
-                                                        ]),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        SizedBox(
-                                                          height: 35,
-                                                          width: 95,
-                                                          child: ElevatedButton(
-                                                            onPressed: loading3
-                                                                ? null
-                                                                : () async {
-                                                                    setState(
-                                                                        () {
-                                                                      loading3 =
-                                                                          true;
-                                                                    });
-                                                                    getReport(
-                                                                        destination
-                                                                            .text,
-                                                                        vidx.text,
-                                                                        index);
-                                                                  },
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .redAccent,
-                                                            ),
-                                                            child: loading3
-                                                                ? const SizedBox(
-                                                                    height: 28,
-                                                                    width: 30,
-                                                                    child:
-                                                                        CircularProgressIndicator())
-                                                                : Text(
-                                                                    "COMPLAINT",
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            MediaQuery.of(context).textScaleFactor *
-                                                                                11),
-                                                                  ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text("Book-In"),
+                                                              ]),
+                                                              Row(children: [
+                                                                Text(
+                                                                    "Book-Out"),
+                                                              ]),
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text("Book-In"),
-                                                        ]),
-                                                        Row(children: [
-                                                          Text("Book-Out"),
-                                                        ]),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data2[index]
-                                                                            [
-                                                                            'bookin'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data2[index]
+                                                                              [
+                                                                              'bookin'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data2[index]
+                                                                              [
+                                                                              'bookout'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                            ],
                                                           ),
-                                                        ]),
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data2[index]
-                                                                            [
-                                                                            'bookout'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                          const Spacer(
+                                                            flex: 1,
                                                           ),
-                                                        ]),
-                                                      ],
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding: EdgeInsets.only(
-                                                              right: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.033),
-                                                          child: SizedBox(
-                                                            height: 30,
-                                                            width: 65,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed: loading4
-                                                                  ? null
-                                                                  : data2[index]['otpid'] != ""
-                                                                      ? null
-                                                                      : () async {
-                                                                          setState(
-                                                                              () {
-                                                                            loading4 =
-                                                                                true;
-                                                                          });
-                                                                          Future.delayed(
-                                                                              const Duration(seconds: 1),
-                                                                              () {
-                                                                            setState(() {
-                                                                              loading4 = false;
-                                                                            });
-                                                                            showDialog(
-                                                                                context: context,
-                                                                                builder: (BuildContext context) {
-                                                                                  return WillPopScope(
-                                                                                    onWillPop: () async {
-                                                                                      return false;
-                                                                                    },
-                                                                                    child: AlertDialog(
-                                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                                                                                      actions: [
-                                                                                        TextButton(
-                                                                                          child: const Text("Submit"),
-                                                                                          onPressed: () {
-                                                                                            cekOTP(otp.text, index);
-                                                                                            Navigator.of(context).pop();
+                                                          Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    right: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.033),
+                                                                child: SizedBox(
+                                                                  height: 30,
+                                                                  width: 65,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed: loading4
+                                                                        ? null
+                                                                        : data2[index]['otpid'] != ""
+                                                                            ? null
+                                                                            : () async {
+                                                                                setState(() {
+                                                                                  loading4 = true;
+                                                                                });
+                                                                                Future.delayed(const Duration(seconds: 1), () {
+                                                                                  setState(() {
+                                                                                    loading4 = false;
+                                                                                  });
+                                                                                  showDialog(
+                                                                                      context: context,
+                                                                                      builder: (BuildContext context) {
+                                                                                        return WillPopScope(
+                                                                                          onWillPop: () async {
+                                                                                            return false;
                                                                                           },
-                                                                                        ),
-                                                                                        TextButton(
-                                                                                          child: const Text("Close"),
-                                                                                          onPressed: () {
-                                                                                            Navigator.of(context).pop();
-                                                                                          },
-                                                                                        ),
-                                                                                      ],
-                                                                                      content: Stack(
-                                                                                        children: <Widget>[
-                                                                                          Column(
-                                                                                            mainAxisSize: MainAxisSize.min,
-                                                                                            children: <Widget>[
-                                                                                              TextFormField(
-                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                                enabled: false,
-                                                                                                autocorrect: false,
-                                                                                                controller: phone,
-                                                                                                decoration: const InputDecoration(
-                                                                                                  labelText: 'Phone',
-                                                                                                  icon: Icon(Icons.phone),
-                                                                                                ),
-                                                                                                validator: (value) {
-                                                                                                  return (value != null && value.length == 10) ? null : 'Phone number must be more than or equal to 10 numbers';
+                                                                                          child: AlertDialog(
+                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+                                                                                            actions: [
+                                                                                              TextButton(
+                                                                                                child: const Text("Submit"),
+                                                                                                onPressed: () {
+                                                                                                  cekOTP(otp.text, index);
+                                                                                                  Navigator.of(context).pop();
                                                                                                 },
                                                                                               ),
-                                                                                              const SizedBox(height: 30),
-                                                                                              TextFormField(
-                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                                autocorrect: false,
-                                                                                                controller: otp,
-                                                                                                decoration: InputDecoration(
-                                                                                                  hintText: '123***',
-                                                                                                  labelText: 'OTP',
-                                                                                                  icon: const Icon(Icons.chat),
-                                                                                                  suffixIcon: TextButton(
-                                                                                                    onPressed: () {
-                                                                                                      getOTP(phone.text, index);
-                                                                                                    },
-                                                                                                    child: const Text("Request OTP"),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                validator: (value) {
-                                                                                                  return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6';
+                                                                                              TextButton(
+                                                                                                child: const Text("Close"),
+                                                                                                onPressed: () {
+                                                                                                  Navigator.of(context).pop();
                                                                                                 },
                                                                                               ),
                                                                                             ],
+                                                                                            content: Stack(
+                                                                                              children: <Widget>[
+                                                                                                Column(
+                                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                                  children: <Widget>[
+                                                                                                    TextFormField(
+                                                                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                      enabled: false,
+                                                                                                      autocorrect: false,
+                                                                                                      controller: phone,
+                                                                                                      decoration: const InputDecoration(
+                                                                                                        labelText: 'Phone',
+                                                                                                        icon: Icon(Icons.phone),
+                                                                                                      ),
+                                                                                                      validator: (value) {
+                                                                                                        return (value != null && value.length == 10) ? null : 'Phone number must be more than or equal to 10 numbers';
+                                                                                                      },
+                                                                                                    ),
+                                                                                                    const SizedBox(height: 30),
+                                                                                                    TextFormField(
+                                                                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                      autocorrect: false,
+                                                                                                      controller: otp,
+                                                                                                      decoration: InputDecoration(
+                                                                                                        hintText: '123***',
+                                                                                                        labelText: 'OTP',
+                                                                                                        icon: const Icon(Icons.chat),
+                                                                                                        suffixIcon: TextButton(
+                                                                                                          onPressed: () {
+                                                                                                            getOTP(phone.text, index);
+                                                                                                          },
+                                                                                                          child: const Text("Request OTP"),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      validator: (value) {
+                                                                                                        return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6';
+                                                                                                      },
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  );
+                                                                                        );
+                                                                                      });
                                                                                 });
-                                                                          });
-                                                                        },
-                                                              style:
-                                                                  ElevatedButton
-                                                                      .styleFrom(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .redAccent,
-                                                              ),
-                                                              child: loading4
-                                                                  ? const CircularProgressIndicator()
-                                                                  : Text(
-                                                                      "OTP",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              MediaQuery.of(context).textScaleFactor * 11),
+                                                                              },
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .redAccent,
                                                                     ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            );
-          } else if (data1.isNotEmpty && data2.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                        ),
-                      ),
-                      width: double.infinity,
-                      height: size.height * 0.1,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: 350,
-                      height: 230,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            Text(
-                              "WELCOME",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).textScaleFactor *
-                                          20),
-                            ),
-                            const SizedBox(height: 20),
-                            Text("Name : ${data[index]['namaasli']}".trim()),
-                            const SizedBox(height: 5),
-                            Text(
-                                "Username : ${data[index]['username']}".trim()),
-                            const SizedBox(height: 5),
-                            Text("ID Employee : ${data[index]['idemployee']}"
-                                .trim()),
-                            const SizedBox(height: 10),
-                            Container(
-                              margin: const EdgeInsets.all(15),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading1
-                                          ? null
-                                          : () {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReservasiMess(
-                                                    userapi: userapi,
-                                                    passapi: passapi,
-                                                    data: data,
-                                                    data1: data1,
-                                                    data2: data2,
-                                                  ),
-                                                ));
-                                                setState(() {
-                                                  loading1 = false;
-                                                });
-                                              });
-                                            },
-                                      child: loading1
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Mess Reservation",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                  const Spacer(
-                                    flex: 1,
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading2
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading2 = true;
-                                              });
-                                              getReserveHist(destination.text,
-                                                  idpegawai.text);
-                                            },
-                                      child: loading2
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Reservation History",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Pending Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: loading
-                                  ? const CircularProgressIndicator()
-                                  : PageView.builder(
-                                      itemCount: data1.length,
-                                      pageSnapping: true,
-                                      controller: _pageController,
-                                      onPageChanged: (page) {
-                                        setState(() {
-                                          activePage = page;
-                                        });
-                                      },
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          color: Colors.white,
-                                          elevation: 8.0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  color: Colors.black12,
-                                                  height: 45,
-                                                  child: Row(children: [
-                                                    Text(
-                                                      "${data1[index]['idx']}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .textScaleFactor *
-                                                              18),
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Text(
-                                                      DateFormat('MMM dd, yyyy')
-                                                          .format(DateTime
-                                                                  .parse(data1[
-                                                                          index]
-                                                                      [
-                                                                      'insertdate'])
-                                                              .toLocal()),
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ]),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text("Necessary"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Notes"),
-                                                          ]),
-                                                        ]),
-                                                    Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data1[index]['necessary']}",
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data1[index]['notes']}",
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ]),
-                                                        ]),
-                                                  ],
-                                                ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text("Book-In"),
-                                                        ]),
-                                                        Row(
-                                                          children: [
-                                                            Text("Book-Out"),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data1[index]
-                                                                            [
-                                                                            'checkin'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ]),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              DateFormat(
-                                                                      ' : MMM dd, yyyy')
-                                                                  .format(DateTime.parse(
-                                                                          data1[index]
-                                                                              [
-                                                                              'checkout'])
-                                                                      .toLocal()),
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                            ),
-                            const SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: indicators(indiLength, activePage),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Current Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: Center(
-                                  child: loading
-                                      ? const CircularProgressIndicator()
-                                      : const Text(
-                                          "NO CURRENT RESERVATION",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            );
-          } else {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
-                        ),
-                      ),
-                      width: double.infinity,
-                      height: size.height * 0.1,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: 350,
-                      height: 230,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            Text(
-                              "WELCOME",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).textScaleFactor *
-                                          20),
-                            ),
-                            const SizedBox(height: 20),
-                            Text("Name : ${data[index]['namaasli']}".trim()),
-                            const SizedBox(height: 5),
-                            Text(
-                                "Username : ${data[index]['username']}".trim()),
-                            const SizedBox(height: 5),
-                            Text("ID Employee : ${data[index]['idemployee']}"
-                                .trim()),
-                            const SizedBox(height: 10),
-                            Container(
-                              margin: const EdgeInsets.all(15),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading1
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading1 = true;
-                                              });
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReservasiMess(
-                                                    userapi: userapi,
-                                                    passapi: passapi,
-                                                    data: data,
-                                                    data1: data1,
-                                                    data2: data2,
-                                                  ),
-                                                ));
-                                                setState(() {
-                                                  loading1 = false;
-                                                });
-                                              });
-                                            },
-                                      child: loading1
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Mess Reservation",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                  const Spacer(
-                                    flex: 1,
-                                  ),
-                                  SizedBox(
-                                    height: 65,
-                                    width: 110,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        elevation: 10.0,
-                                        side: const BorderSide(
-                                            color: Colors.red, width: 2),
-                                      ),
-                                      onPressed: loading2
-                                          ? null
-                                          : () async {
-                                              setState(() {
-                                                loading2 = true;
-                                              });
-                                              getReserveHist(destination.text,
-                                                  idpegawai.text);
-                                            },
-                                      child: loading2
-                                          ? const CircularProgressIndicator()
-                                          : const Text(
-                                              "Reservation History",
-                                              style: TextStyle(
-                                                  color: Colors.black54),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Pending Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: loading
-                                  ? const CircularProgressIndicator()
-                                  : PageView.builder(
-                                      itemCount: data1.length,
-                                      pageSnapping: true,
-                                      controller: _pageController,
-                                      onPageChanged: (page) {
-                                        setState(() {
-                                          activePage = page;
-                                        });
-                                      },
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          color: Colors.white,
-                                          elevation: 8.0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  color: Colors.black12,
-                                                  height: 45,
-                                                  child: Row(children: [
-                                                    Text(
-                                                      "${data1[index]['idx']}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .textScaleFactor *
-                                                              18),
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Text(
-                                                      DateFormat('MMM dd, yyyy')
-                                                          .format(DateTime
-                                                                  .parse(data1[
-                                                                          index]
-                                                                      [
-                                                                      'insertdate'])
-                                                              .toLocal()),
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ]),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text("Necessary"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Notes"),
-                                                          ]),
-                                                        ]),
-                                                    Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data1[index]['necessary']}",
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data1[index]['notes']}",
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ]),
-                                                        ]),
-                                                  ],
-                                                ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text("Book-In"),
-                                                        ]),
-                                                        Row(
-                                                          children: [
-                                                            Text("Book-Out"),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data1[index]
-                                                                            [
-                                                                            'checkin'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ]),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              DateFormat(
-                                                                      ' : MMM dd, yyyy')
-                                                                  .format(DateTime.parse(
-                                                                          data1[index]
-                                                                              [
-                                                                              'checkout'])
-                                                                      .toLocal()),
-                                                              style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                            ),
-                            const SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: indicators(indiLength, activePage),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "Current Reservation",
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).textScaleFactor * 30,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              width: 350,
-                              height: 250,
-                              child: loading
-                                  ? const CircularProgressIndicator()
-                                  : ListView.builder(
-                                      itemCount: data2.length,
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          color: Colors.white,
-                                          elevation: 8.0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.all(10),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  color: Colors.black12,
-                                                  height: 45,
-                                                  child: Row(children: [
-                                                    Text(
-                                                      "${data2[index]['idx']}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .textScaleFactor *
-                                                              18),
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Text(
-                                                      "${data2[index]['idkamar']}",
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ]),
-                                                ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text("Area"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Block"),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text("Number"),
-                                                          ]),
-                                                          Row(
-                                                            children: [
-                                                              Text("Bed"),
-                                                            ],
-                                                          ),
-                                                        ]),
-                                                    Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['areamess']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            )
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['blok']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            ),
-                                                          ]),
-                                                          Row(children: [
-                                                            Text(
-                                                              " ${data2[index]['nokamar']}",
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize:
-                                                                      MediaQuery.of(context)
-                                                                              .textScaleFactor *
-                                                                          12),
-                                                            )
-                                                          ]),
-                                                          Row(
-                                                            children: [
-                                                              Text(
-                                                                " ${data2[index]['namabed']}",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        MediaQuery.of(context).textScaleFactor *
-                                                                            12),
+                                                                    child: loading4
+                                                                        ? const CircularProgressIndicator()
+                                                                        : Text(
+                                                                            "OTP",
+                                                                            style:
+                                                                                TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 11),
+                                                                          ),
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ],
                                                           )
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (data1.isNotEmpty && data2.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/logo.png'),
+                              ),
+                            ),
+                            width: double.infinity,
+                            height: size.height * 0.1,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 350,
+                            height: 230,
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 8.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "WELCOME",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: MediaQuery.of(context)
+                                                .textScaleFactor *
+                                            20),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text("Name : ${data[index]['namaasli']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text("Username : ${data[index]['username']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                      "ID Employee : ${data[index]['idemployee']}"
+                                          .trim()),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    margin: const EdgeInsets.all(15),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading1
+                                                ? null
+                                                : () {
+                                                    setState(() {
+                                                      loading1 = true;
+                                                    });
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReservasiMess(
+                                                          userapi: userapi,
+                                                          passapi: passapi,
+                                                          data: data,
+                                                          data1: data1,
+                                                          data2: data2,
+                                                        ),
+                                                      ));
+                                                      setState(() {
+                                                        loading1 = false;
+                                                      });
+                                                    });
+                                                  },
+                                            child: loading1
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Mess Reservation",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                        const Spacer(
+                                          flex: 1,
+                                        ),
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading2
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading2 = true;
+                                                    });
+                                                    getReserveHist(
+                                                        destination.text,
+                                                        idpegawai.text);
+                                                  },
+                                            child: loading2
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Reservation History",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Pending Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: loading
+                                        ? const CircularProgressIndicator()
+                                        : PageView.builder(
+                                            itemCount: data1.length,
+                                            pageSnapping: true,
+                                            controller: _pageController,
+                                            onPageChanged: (page) {
+                                              setState(() {
+                                                activePage = page;
+                                              });
+                                            },
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                color: Colors.white,
+                                                elevation: 8.0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        color: Colors.black12,
+                                                        height: 45,
+                                                        child: Row(children: [
+                                                          Text(
+                                                            "${data1[index]['idx']}",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .textScaleFactor *
+                                                                    18),
+                                                          ),
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                    'MMM dd, yyyy')
+                                                                .format(DateTime.parse(
+                                                                        data1[index]
+                                                                            [
+                                                                            'insertdate'])
+                                                                    .toLocal()),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
                                                         ]),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        SizedBox(
-                                                          height: 35,
-                                                          width: 95,
-                                                          child: ElevatedButton(
-                                                            onPressed: loading3
-                                                                ? null
-                                                                : () async {
-                                                                    setState(
-                                                                        () {
-                                                                      loading3 =
-                                                                          true;
-                                                                    });
-                                                                    getReport(
-                                                                        destination
-                                                                            .text,
-                                                                        vidx.text,
-                                                                        index);
-                                                                  },
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .redAccent,
-                                                            ),
-                                                            child: loading3
-                                                                ? const SizedBox(
-                                                                    height: 28,
-                                                                    width: 30,
-                                                                    child:
-                                                                        CircularProgressIndicator())
-                                                                : Text(
-                                                                    "COMPLAINT",
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                      "Necessary"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text("Notes"),
+                                                                ]),
+                                                              ]),
+                                                          Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data1[index]['necessary']}",
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  )
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data1[index]['notes']}",
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ]),
+                                                              ]),
+                                                        ],
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text("Book-In"),
+                                                              ]),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                      "Book-Out"),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data1[index]
+                                                                              [
+                                                                              'checkin'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    DateFormat(
+                                                                            ' : MMM dd, yyyy')
+                                                                        .format(
+                                                                            DateTime.parse(data1[index]['checkout']).toLocal()),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children:
+                                        indicators(indiLength, activePage),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Current Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: Center(
+                                        child: loading
+                                            ? const CircularProgressIndicator()
+                                            : const Text(
+                                                "NO CURRENT RESERVATION",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              )),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/logo.png'),
+                              ),
+                            ),
+                            width: double.infinity,
+                            height: size.height * 0.1,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 350,
+                            height: 230,
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 8.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "WELCOME",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: MediaQuery.of(context)
+                                                .textScaleFactor *
+                                            20),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text("Name : ${data[index]['namaasli']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text("Username : ${data[index]['username']}"
+                                      .trim()),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                      "ID Employee : ${data[index]['idemployee']}"
+                                          .trim()),
+                                  const SizedBox(height: 10),
+                                  Container(
+                                    margin: const EdgeInsets.all(15),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading1
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading1 = true;
+                                                    });
+                                                    Future.delayed(
+                                                        const Duration(
+                                                            seconds: 1), () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                              MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReservasiMess(
+                                                          userapi: userapi,
+                                                          passapi: passapi,
+                                                          data: data,
+                                                          data1: data1,
+                                                          data2: data2,
+                                                        ),
+                                                      ));
+                                                      setState(() {
+                                                        loading1 = false;
+                                                      });
+                                                    });
+                                                  },
+                                            child: loading1
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Mess Reservation",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                        const Spacer(
+                                          flex: 1,
+                                        ),
+                                        SizedBox(
+                                          height: 65,
+                                          width: 110,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 10.0,
+                                              side: const BorderSide(
+                                                  color: Colors.red, width: 2),
+                                            ),
+                                            onPressed: loading2
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      loading2 = true;
+                                                    });
+                                                    getReserveHist(
+                                                        destination.text,
+                                                        idpegawai.text);
+                                                  },
+                                            child: loading2
+                                                ? const CircularProgressIndicator()
+                                                : const Text(
+                                                    "Reservation History",
+                                                    style: TextStyle(
+                                                        color: Colors.black54),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Pending Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: loading
+                                        ? const CircularProgressIndicator()
+                                        : PageView.builder(
+                                            itemCount: data1.length,
+                                            pageSnapping: true,
+                                            controller: _pageController,
+                                            onPageChanged: (page) {
+                                              setState(() {
+                                                activePage = page;
+                                              });
+                                            },
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                color: Colors.white,
+                                                elevation: 8.0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        color: Colors.black12,
+                                                        height: 45,
+                                                        child: Row(children: [
+                                                          Text(
+                                                            "${data1[index]['idx']}",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .textScaleFactor *
+                                                                    18),
+                                                          ),
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                    'MMM dd, yyyy')
+                                                                .format(DateTime.parse(
+                                                                        data1[index]
+                                                                            [
+                                                                            'insertdate'])
+                                                                    .toLocal()),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ]),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                      "Necessary"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text("Notes"),
+                                                                ]),
+                                                              ]),
+                                                          Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data1[index]['necessary']}",
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  )
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data1[index]['notes']}",
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ]),
+                                                              ]),
+                                                        ],
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text("Book-In"),
+                                                              ]),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                      "Book-Out"),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data1[index]
+                                                                              [
+                                                                              'checkin'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    DateFormat(
+                                                                            ' : MMM dd, yyyy')
+                                                                        .format(
+                                                                            DateTime.parse(data1[index]['checkout']).toLocal()),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children:
+                                        indicators(indiLength, activePage),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            "Current Reservation",
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).textScaleFactor * 30,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 350,
+                                    height: 250,
+                                    child: loading
+                                        ? const CircularProgressIndicator()
+                                        : ListView.builder(
+                                            itemCount: data2.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                color: Colors.white,
+                                                elevation: 8.0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                                child: Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        color: Colors.black12,
+                                                        height: 45,
+                                                        child: Row(children: [
+                                                          Text(
+                                                            "${data2[index]['idx']}",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .textScaleFactor *
+                                                                    18),
+                                                          ),
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Text(
+                                                            "${data2[index]['idkamar']}",
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ]),
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text("Area"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text("Block"),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                      "Number"),
+                                                                ]),
+                                                                Row(
+                                                                  children: [
+                                                                    Text("Bed"),
+                                                                  ],
+                                                                ),
+                                                              ]),
+                                                          Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['areamess']}",
                                                                     style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
                                                                         fontSize:
                                                                             MediaQuery.of(context).textScaleFactor *
-                                                                                11),
+                                                                                12),
+                                                                  )
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['blok']}",
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            MediaQuery.of(context).textScaleFactor *
+                                                                                12),
                                                                   ),
+                                                                ]),
+                                                                Row(children: [
+                                                                  Text(
+                                                                    " ${data2[index]['nokamar']}",
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            MediaQuery.of(context).textScaleFactor *
+                                                                                12),
+                                                                  )
+                                                                ]),
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      " ${data2[index]['namabed']}",
+                                                                      style: TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontSize:
+                                                                              MediaQuery.of(context).textScaleFactor * 12),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ]),
+                                                          const Spacer(
+                                                            flex: 1,
                                                           ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                const Divider(
-                                                  thickness: 2,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text("Book-In"),
-                                                        ]),
-                                                        Row(children: [
-                                                          Text("Book-Out"),
-                                                        ]),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data2[index]
-                                                                            [
-                                                                            'bookin'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                          Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 35,
+                                                                width: 95,
+                                                                child:
+                                                                    ElevatedButton(
+                                                                  onPressed:
+                                                                      loading3
+                                                                          ? null
+                                                                          : () async {
+                                                                              setState(() {
+                                                                                loading3 = true;
+                                                                              });
+                                                                              getReport(destination.text, vidx.text, index);
+                                                                            },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .redAccent,
+                                                                  ),
+                                                                  child:
+                                                                      loading3
+                                                                          ? const SizedBox(
+                                                                              height: 28,
+                                                                              width: 30,
+                                                                              child: CircularProgressIndicator())
+                                                                          : Text(
+                                                                              "COMPLAINT",
+                                                                              style: TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 11),
+                                                                            ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 2,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text("Book-In"),
+                                                              ]),
+                                                              Row(children: [
+                                                                Text(
+                                                                    "Book-Out"),
+                                                              ]),
+                                                            ],
                                                           ),
-                                                        ]),
-                                                        Row(children: [
-                                                          Text(
-                                                            DateFormat(
-                                                                    ' : MMM dd, yyyy')
-                                                                .format(DateTime.parse(
-                                                                        data2[index]
-                                                                            [
-                                                                            'bookout'])
-                                                                    .toLocal()),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data2[index]
+                                                                              [
+                                                                              'bookin'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                              Row(children: [
+                                                                Text(
+                                                                  DateFormat(
+                                                                          ' : MMM dd, yyyy')
+                                                                      .format(DateTime.parse(data2[index]
+                                                                              [
+                                                                              'bookout'])
+                                                                          .toLocal()),
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ]),
+                                                            ],
                                                           ),
-                                                        ]),
-                                                      ],
-                                                    ),
-                                                    const Spacer(
-                                                      flex: 1,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding: EdgeInsets.only(
-                                                              right: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.033),
-                                                          child: SizedBox(
-                                                            height: 30,
-                                                            width: 65,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed: loading4
-                                                                  ? null
-                                                                  : data2[index]['otpid'] != ""
-                                                                      ? null
-                                                                      : () async {
-                                                                          setState(
-                                                                              () {
-                                                                            loading4 =
-                                                                                true;
-                                                                          });
-                                                                          Future.delayed(
-                                                                              const Duration(seconds: 1),
-                                                                              () {
-                                                                            setState(() {
-                                                                              loading4 = false;
-                                                                            });
-                                                                            showDialog(
-                                                                                context: context,
-                                                                                builder: (BuildContext context) {
-                                                                                  return WillPopScope(
-                                                                                    onWillPop: () async {
-                                                                                      return false;
-                                                                                    },
-                                                                                    child: AlertDialog(
-                                                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                                                                                      actions: [
-                                                                                        TextButton(
-                                                                                          child: const Text("Submit"),
-                                                                                          onPressed: () {
-                                                                                            cekOTP(otp.text, index);
-                                                                                            Future.delayed(const Duration(seconds: 1), () {
-                                                                                              updateData1(destination.text, idpegawai.text);
-                                                                                              updateData2(destination.text, idpegawai.text);
-                                                                                            });
-                                                                                            Navigator.of(context).pop();
+                                                          const Spacer(
+                                                            flex: 1,
+                                                          ),
+                                                          Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    right: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width *
+                                                                        0.033),
+                                                                child: SizedBox(
+                                                                  height: 30,
+                                                                  width: 65,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed: loading4
+                                                                        ? null
+                                                                        : data2[index]['otpid'] != ""
+                                                                            ? null
+                                                                            : () async {
+                                                                                setState(() {
+                                                                                  loading4 = true;
+                                                                                });
+                                                                                Future.delayed(const Duration(seconds: 1), () {
+                                                                                  setState(() {
+                                                                                    loading4 = false;
+                                                                                  });
+                                                                                  showDialog(
+                                                                                      context: context,
+                                                                                      builder: (BuildContext context) {
+                                                                                        return WillPopScope(
+                                                                                          onWillPop: () async {
+                                                                                            return false;
                                                                                           },
-                                                                                        ),
-                                                                                        TextButton(
-                                                                                          child: const Text("Close"),
-                                                                                          onPressed: () {
-                                                                                            Navigator.of(context).pop();
-                                                                                          },
-                                                                                        ),
-                                                                                      ],
-                                                                                      content: Stack(
-                                                                                        children: <Widget>[
-                                                                                          Column(
-                                                                                            mainAxisSize: MainAxisSize.min,
-                                                                                            children: <Widget>[
-                                                                                              TextFormField(
-                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                                autocorrect: false,
-                                                                                                controller: phone,
-                                                                                                decoration: const InputDecoration(
-                                                                                                  labelText: 'Phone',
-                                                                                                  icon: Icon(Icons.phone),
-                                                                                                ),
-                                                                                                validator: (value) {
-                                                                                                  return (value != null && value.length >= 10) ? null : 'Phone number must be more than or equal to 10 numbers';
+                                                                                          child: AlertDialog(
+                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+                                                                                            actions: [
+                                                                                              TextButton(
+                                                                                                child: const Text("Submit"),
+                                                                                                onPressed: () {
+                                                                                                  cekOTP(otp.text, index);
+                                                                                                  Future.delayed(const Duration(seconds: 1), () {
+                                                                                                    updateData1(destination.text, idpegawai.text);
+                                                                                                    updateData2(destination.text, idpegawai.text);
+                                                                                                  });
+                                                                                                  Navigator.of(context).pop();
                                                                                                 },
                                                                                               ),
-                                                                                              const SizedBox(height: 30),
-                                                                                              TextFormField(
-                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                                autocorrect: false,
-                                                                                                controller: otp,
-                                                                                                decoration: InputDecoration(
-                                                                                                  hintText: '123***',
-                                                                                                  labelText: 'OTP',
-                                                                                                  icon: const Icon(Icons.chat),
-                                                                                                  suffixIcon: TextButton(
-                                                                                                    onPressed: () {
-                                                                                                      getOTP(phone.text, index);
-                                                                                                    },
-                                                                                                    child: const Text("Request OTP"),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                validator: (value) {
-                                                                                                  return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6 characters';
+                                                                                              TextButton(
+                                                                                                child: const Text("Close"),
+                                                                                                onPressed: () {
+                                                                                                  Navigator.of(context).pop();
                                                                                                 },
                                                                                               ),
                                                                                             ],
+                                                                                            content: Stack(
+                                                                                              children: <Widget>[
+                                                                                                Column(
+                                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                                  children: <Widget>[
+                                                                                                    TextFormField(
+                                                                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                      autocorrect: false,
+                                                                                                      controller: phone,
+                                                                                                      decoration: const InputDecoration(
+                                                                                                        labelText: 'Phone',
+                                                                                                        icon: Icon(Icons.phone),
+                                                                                                      ),
+                                                                                                      validator: (value) {
+                                                                                                        return (value != null && value.length >= 10) ? null : 'Phone number must be more than or equal to 10 numbers';
+                                                                                                      },
+                                                                                                    ),
+                                                                                                    const SizedBox(height: 30),
+                                                                                                    TextFormField(
+                                                                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                      autocorrect: false,
+                                                                                                      controller: otp,
+                                                                                                      decoration: InputDecoration(
+                                                                                                        hintText: '123***',
+                                                                                                        labelText: 'OTP',
+                                                                                                        icon: const Icon(Icons.chat),
+                                                                                                        suffixIcon: TextButton(
+                                                                                                          onPressed: () {
+                                                                                                            getOTP(phone.text, index);
+                                                                                                          },
+                                                                                                          child: const Text("Request OTP"),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      validator: (value) {
+                                                                                                        return (value != null && value.length == 6) ? null : 'OTP code must be equal to 6 characters';
+                                                                                                      },
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  );
+                                                                                        );
+                                                                                      });
                                                                                 });
-                                                                          });
-                                                                        },
-                                                              style:
-                                                                  ElevatedButton
-                                                                      .styleFrom(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .redAccent,
-                                                              ),
-                                                              child: loading4
-                                                                  ? const CircularProgressIndicator()
-                                                                  : Text(
-                                                                      "OTP",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              MediaQuery.of(context).textScaleFactor * 11),
+                                                                              },
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .redAccent,
                                                                     ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
+                                                                    child: loading4
+                                                                        ? const CircularProgressIndicator()
+                                                                        : Text(
+                                                                            "OTP",
+                                                                            style:
+                                                                                TextStyle(fontSize: MediaQuery.of(context).textScaleFactor * 11),
+                                                                          ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                            ),
-                          ],
-                        ),
-                      ],
+                                              );
+                                            }),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            );
-          }
-        },
-      ),
+                  );
+                }
+              },
+            ),
     );
   }
 }

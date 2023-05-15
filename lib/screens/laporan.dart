@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'dart:convert';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lionair_2/screens/images.dart';
@@ -62,6 +63,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   bool loading = false;
   bool loading1 = false;
   bool loading2 = false;
+  bool _isConnected = true;
 
   List data = [];
   List data1 = [];
@@ -264,6 +266,16 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _isConnected = (result != ConnectivityResult.none);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -293,212 +305,240 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : data4.isEmpty
-              ? Container(
-                  alignment: Alignment.topCenter,
-                  child: const Text("No Data"),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  key: _formKey,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 10),
-                            Text(
-                              "${data4[index]['vidx']}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      MediaQuery.of(context).textScaleFactor *
+      body: !_isConnected
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('No Internet Connection,'),
+                  Text('Please Check Your Connection!!'),
+                ],
+              ),
+            )
+          : loading
+              ? const Center(child: CircularProgressIndicator())
+              : data4.isEmpty
+                  ? Container(
+                      alignment: Alignment.topCenter,
+                      child: const Text("No Data"),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      key: _formKey,
+                      itemCount: 1,
+                      itemBuilder: (context, index) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                const SizedBox(height: 10),
+                                Text(
+                                  "${data4[index]['vidx']}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: MediaQuery.of(context)
+                                              .textScaleFactor *
                                           20),
-                            ),
-                            const SizedBox(height: 40),
-                            Container(
-                              alignment: Alignment.bottomLeft,
-                              margin: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Total Rows: ${data4.length}",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).textScaleFactor *
+                                ),
+                                const SizedBox(height: 40),
+                                Container(
+                                  alignment: Alignment.bottomLeft,
+                                  margin: const EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    "Total Rows: ${data4.length}",
+                                    style: TextStyle(
+                                        fontSize: MediaQuery.of(context)
+                                                .textScaleFactor *
                                             15),
-                              ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.72,
-                              child: DataTable2(
-                                columnSpacing: 1,
-                                horizontalMargin: 10,
-                                minWidth: 1303,
-                                columns: const [
-                                  DataColumn(label: Text("IDX")),
-                                  DataColumn(label: Text("Category")),
-                                  DataColumn(label: Text("Date")),
-                                  DataColumn2(
-                                      label: Text("Description"),
-                                      size: ColumnSize.L),
-                                  DataColumn2(
-                                      label: Text("Resolution"),
-                                      size: ColumnSize.L),
-                                  DataColumn2(
-                                      label: Text("Status"),
-                                      size: ColumnSize.S),
-                                  DataColumn2(
-                                      label: Text("Attachment"),
-                                      size: ColumnSize.L),
-                                ],
-                                rows: List<DataRow>.generate(
-                                  data4.length,
-                                  (index) => DataRow(
-                                    color: MaterialStateProperty.resolveWith<
-                                        Color?>((Set<MaterialState> states) {
-                                      // Even rows will have a grey color.
-                                      if (index.isOdd) {
-                                        return Colors.grey.withOpacity(0.3);
-                                      }
-                                      return null; // Use default value for other states and odd rows.
-                                    }),
-                                    cells: <DataCell>[
-                                      DataCell(Text("${data4[index]['idx']}")),
-                                      DataCell(
-                                          Text("${data4[index]['category']}")),
-                                      DataCell(Text(DateFormat('MMM d, yyyy')
-                                          .format(DateTime.parse(
-                                                  data4[index]['date'])
-                                              .toLocal()))),
-                                      DataCell(Text(
-                                          "${data4[index]['description']}")),
-                                      DataCell(Text(
-                                          "${data4[index]['resolution']}")),
-                                      DataCell(Text(
-                                        "${data4[index]['status']}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                      )),
-                                      DataCell(
-                                        data4[index]['status'] == "CLOSE"
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.72,
+                                  child: DataTable2(
+                                    columnSpacing: 1,
+                                    horizontalMargin: 10,
+                                    minWidth: 1303,
+                                    columns: const [
+                                      DataColumn(label: Text("IDX")),
+                                      DataColumn(label: Text("Category")),
+                                      DataColumn(label: Text("Date")),
+                                      DataColumn2(
+                                          label: Text("Description"),
+                                          size: ColumnSize.L),
+                                      DataColumn2(
+                                          label: Text("Resolution"),
+                                          size: ColumnSize.L),
+                                      DataColumn2(
+                                          label: Text("Status"),
+                                          size: ColumnSize.S),
+                                      DataColumn2(
+                                          label: Text("Attachment"),
+                                          size: ColumnSize.L),
+                                    ],
+                                    rows: List<DataRow>.generate(
+                                      data4.length,
+                                      (index) => DataRow(
+                                        color: MaterialStateProperty
+                                            .resolveWith<Color?>(
+                                                (Set<MaterialState> states) {
+                                          // Even rows will have a grey color.
+                                          if (index.isOdd) {
+                                            return Colors.grey.withOpacity(0.3);
+                                          }
+                                          return null; // Use default value for other states and odd rows.
+                                        }),
+                                        cells: <DataCell>[
+                                          DataCell(
+                                              Text("${data4[index]['idx']}")),
+                                          DataCell(Text(
+                                              "${data4[index]['category']}")),
+                                          DataCell(Text(
+                                              DateFormat('MMM d, yyyy').format(
+                                                  DateTime.parse(
+                                                          data4[index]['date'])
+                                                      .toLocal()))),
+                                          DataCell(Text(
+                                              "${data4[index]['description']}")),
+                                          DataCell(Text(
+                                              "${data4[index]['resolution']}")),
+                                          DataCell(Text(
+                                            "${data4[index]['status']}",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),
+                                          )),
+                                          DataCell(
+                                            data4[index]['status'] == "CLOSE"
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
                                                                 .size
                                                                 .width *
                                                             0.48,
-                                                    child: ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.redAccent,
-                                                      ),
-                                                      onPressed: loading1
-                                                          ? null
-                                                          : () async {
-                                                              setState(() {
-                                                                loading1 = true;
-                                                              });
-                                                              getIDFile(
-                                                                  idreff.text,
-                                                                  index);
-                                                            },
-                                                      child: loading1
-                                                          ? const SizedBox(
-                                                              height: 20,
-                                                              width: 22,
-                                                              child:
-                                                                  CircularProgressIndicator())
-                                                          : const Text("View"),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Row(
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              MyAlertDialog(
-                                                            userapi: userapi,
-                                                            passapi: passapi,
-                                                            data: data,
-                                                            data1: data1,
-                                                            data2: data2,
-                                                            data3: data3,
-                                                            data4: data4,
-                                                            vidx4: vidx4,
-                                                            bookin3: bookin3,
-                                                            bookout3: bookout3,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .redAccent,
                                                           ),
+                                                          onPressed: loading1
+                                                              ? null
+                                                              : () async {
+                                                                  setState(() {
+                                                                    loading1 =
+                                                                        true;
+                                                                  });
+                                                                  getIDFile(
+                                                                      idreff
+                                                                          .text,
+                                                                      index);
+                                                                },
+                                                          child: loading1
+                                                              ? const SizedBox(
+                                                                  height: 20,
+                                                                  width: 22,
+                                                                  child:
+                                                                      CircularProgressIndicator())
+                                                              : const Text(
+                                                                  "View"),
                                                         ),
-                                                      );
-                                                    },
-                                                    child: const Row(
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Icons.photo_library,
-                                                            color: Colors.grey,
-                                                          ),
-                                                          SizedBox(width: 5),
-                                                          Text(
-                                                            "Choose Image",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .grey),
-                                                          ),
-                                                        ]),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  MyAlertDialog(
+                                                                userapi:
+                                                                    userapi,
+                                                                passapi:
+                                                                    passapi,
+                                                                data: data,
+                                                                data1: data1,
+                                                                data2: data2,
+                                                                data3: data3,
+                                                                data4: data4,
+                                                                vidx4: vidx4,
+                                                                bookin3:
+                                                                    bookin3,
+                                                                bookout3:
+                                                                    bookout3,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: const Row(
+                                                            children: <Widget>[
+                                                              Icon(
+                                                                Icons
+                                                                    .photo_library,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                "Choose Image",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .grey),
+                                                              ),
+                                                            ]),
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Colors.redAccent,
+                                                        ),
+                                                        onPressed: loading1
+                                                            ? null
+                                                            : () async {
+                                                                setState(() {
+                                                                  loading1 =
+                                                                      true;
+                                                                });
+                                                                getIDFile(
+                                                                    idreff.text,
+                                                                    index);
+                                                              },
+                                                        child: loading1
+                                                            ? const SizedBox(
+                                                                height: 20,
+                                                                width: 22,
+                                                                child:
+                                                                    CircularProgressIndicator())
+                                                            : const Text(
+                                                                "View"),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  const SizedBox(width: 5),
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      backgroundColor:
-                                                          Colors.redAccent,
-                                                    ),
-                                                    onPressed: loading1
-                                                        ? null
-                                                        : () async {
-                                                            setState(() {
-                                                              loading1 = true;
-                                                            });
-                                                            getIDFile(
-                                                                idreff.text,
-                                                                index);
-                                                          },
-                                                    child: loading1
-                                                        ? const SizedBox(
-                                                            height: 20,
-                                                            width: 22,
-                                                            child:
-                                                                CircularProgressIndicator())
-                                                        : const Text("View"),
-                                                  ),
-                                                ],
-                                              ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                          ),
+                        );
+                      },
+                    ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
