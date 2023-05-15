@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:lionair_2/screens/uppass.dart';
-import 'home_screen.dart' show HomeScreen;
 
 class UserProfile extends StatefulWidget {
   var userapi;

@@ -6,7 +6,6 @@ import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
-import 'laporan.dart';
 
 class Lihatgambar extends StatefulWidget {
   var userapi;

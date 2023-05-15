@@ -5,7 +5,6 @@ import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
-import 'lihat_reservasi.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class LihatRating extends StatefulWidget {
