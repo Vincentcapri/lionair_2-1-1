@@ -294,20 +294,7 @@ class _Lihatgambarstate extends State<Lihatgambar> {
             data5.clear();
             idreff5 = '';
             data6.clear();
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Lihatlaporan(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-                data3: data3,
-                data4: data4,
-                vidx4: vidx4,
-                bookin3: bookin3,
-                bookout3: bookout3,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Attachment"),

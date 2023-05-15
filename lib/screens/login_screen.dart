@@ -267,14 +267,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icons.done, color: Colors.green),
               title: "Login Success",
               backgroundColor: Colors.grey[300]);
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: hasil_result,
-                data1: hasil_result1,
-                data2: hasil_result2),
-          ));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                  userapi: userapi,
+                  passapi: passapi,
+                  data: hasil_result,
+                  data1: hasil_result1,
+                  data2: hasil_result2),
+            ),
+          );
         }
         setState(() {
           loading = false;

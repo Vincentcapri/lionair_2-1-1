@@ -116,6 +116,18 @@ class MyApp extends StatelessWidget {
                 bookin3: '',
                 bookout3: '',
               ),
+          'alertdialog': (_) => MyAlertDialog(
+                userapi: '',
+                passapi: '',
+                data: '',
+                data1: '',
+                data2: '',
+                data3: '',
+                data4: '',
+                vidx4: '',
+                bookin3: '',
+                bookout3: '',
+              ),
           'gambar': (_) => Lihatgambar(
                 userapi: '',
                 passapi: '',

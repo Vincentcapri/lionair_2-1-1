@@ -55,15 +55,7 @@ class _UserProfileState extends State<UserProfile> {
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("User Profile"),

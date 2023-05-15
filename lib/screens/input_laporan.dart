@@ -422,20 +422,7 @@ class _InputLaporanState extends State<InputLaporan> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Lihatlaporan(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-                data3: data3,
-                data4: data4,
-                vidx4: vidx4,
-                bookin3: bookin3,
-                bookout3: bookout3,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
           backgroundColor: Colors.red,
           elevation: 12,

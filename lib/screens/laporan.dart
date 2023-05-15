@@ -60,10 +60,6 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
 
   final _formKey = GlobalKey<FormState>();
 
-  File? _image;
-  String titleImage = "Choose Image";
-  String titleCam = "Take Picture";
-
   bool loading = false;
   bool loading1 = false;
   bool loading2 = false;
@@ -87,32 +83,6 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
   TextEditingController vidx = TextEditingController();
   TextEditingController idreff = TextEditingController();
   TextEditingController idfile = TextEditingController();
-
-  void _getCamera() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.camera);
-    setState(() {
-      if (pickedImage != null && titleImage == "Choose Image") {
-        titleCam = pickedImage.path;
-        _image = File(pickedImage.path);
-      } else {
-        debugPrint('No image selected.');
-      }
-    });
-  }
-
-  void _getImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedImage != null && titleCam == "Take Picture") {
-        titleImage = pickedImage.path;
-        _image = File(pickedImage.path);
-      } else {
-        debugPrint('No image selected.');
-      }
-    });
-  }
 
   void updateData4(String destination, String vidx) async {
     final temporaryList4_1 = [];
@@ -294,65 +264,6 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
     });
   }
 
-  void addImage(index) async {
-    String namaasli = data[0]['namaasli'];
-    String idreff = data4[index]['idx'];
-    String kategori = data4[index]['category'];
-    String base64Image = base64Encode(_image!.readAsBytesSync());
-    String filename = Path.basename(_image!.path);
-
-    final String soapEnvelope = '<?xml version="1.0" encoding="utf-8"?>' +
-        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
-        '<soap:Body>' +
-        '<File_Entry xmlns="http://tempuri.org/">' +
-        '<UsernameApi>$userapi</UsernameApi>' +
-        '<PasswordApi>$passapi</PasswordApi>' +
-        '<DESTINATION>BLJ</DESTINATION>' +
-        '<IDREFF>$idreff</IDREFF>' +
-        '<FILENAME>$filename</FILENAME>' +
-        '<FILEBYTE>$base64Image</FILEBYTE>' +
-        '<FILECAT>$kategori</FILECAT>' +
-        '<USERINSERT>$namaasli</USERINSERT>' +
-        '</File_Entry>' +
-        '</soap:Body>' +
-        '</soap:Envelope>';
-
-    final response = await http.post(Uri.parse(url_File_Entry),
-        headers: <String, String>{
-          "Access-Control-Allow-Origin": "*",
-          'SOAPAction': 'http://tempuri.org/File_Entry',
-          'Access-Control-Allow-Credentials': 'true',
-          'Content-type': 'text/xml; charset=utf-8'
-        },
-        body: soapEnvelope);
-
-    if (response.statusCode == 200) {
-      final responseBody = response.body;
-      final parsedResponse = xml.XmlDocument.parse(responseBody);
-      final result = parsedResponse.findAllElements('_x002D_').single.text;
-      debugPrint('Result: $result');
-      StatusAlert.show(context,
-          duration: const Duration(seconds: 1),
-          configuration:
-              const IconConfiguration(icon: Icons.done, color: Colors.green),
-          title: "Success",
-          backgroundColor: Colors.grey[300]);
-    } else {
-      debugPrint('Error: ${response.statusCode}');
-      StatusAlert.show(
-        context,
-        duration: const Duration(seconds: 1),
-        configuration:
-            const IconConfiguration(icon: Icons.error, color: Colors.red),
-        title: "Input Data5 Failed, ${response.statusCode}",
-        backgroundColor: Colors.grey[300],
-      );
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -364,15 +275,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
             vidx4 = '';
             bookin3 = '';
             bookout3 = '';
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Complaint"),
@@ -524,83 +427,24 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                                 children: [
                                                   TextButton(
                                                     onPressed: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return WillPopScope(
-                                                              onWillPop:
-                                                                  () async {
-                                                                return false;
-                                                              },
-                                                              child:
-                                                                  AlertDialog(
-                                                                shape: RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            6.0)),
-                                                                actions: [
-                                                                  TextButton(
-                                                                    child: const Text(
-                                                                        "Submit"),
-                                                                    onPressed:
-                                                                        () {
-                                                                      addImage(
-                                                                          index);
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
-                                                                  TextButton(
-                                                                    child: const Text(
-                                                                        "Close"),
-                                                                    onPressed:
-                                                                        () {
-                                                                      titleImage =
-                                                                          "Choose Image";
-                                                                      titleCam =
-                                                                          "Take Picture";
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
-                                                                ],
-                                                                content: Stack(
-                                                                  children: <Widget>[
-                                                                    Column(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .min,
-                                                                      children: <Widget>[
-                                                                        ListTile(
-                                                                          leading:
-                                                                              const Icon(Icons.camera_alt),
-                                                                          title:
-                                                                              Text(titleCam),
-                                                                          onTap:
-                                                                              () async {
-                                                                            _getCamera();
-                                                                          },
-                                                                        ),
-                                                                        ListTile(
-                                                                          leading:
-                                                                              const Icon(Icons.photo_library),
-                                                                          title:
-                                                                              Text(titleImage),
-                                                                          onTap:
-                                                                              () async {
-                                                                            _getImage();
-                                                                          },
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            );
-                                                          });
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MyAlertDialog(
+                                                            userapi: userapi,
+                                                            passapi: passapi,
+                                                            data: data,
+                                                            data1: data1,
+                                                            data2: data2,
+                                                            data3: data3,
+                                                            data4: data4,
+                                                            vidx4: vidx4,
+                                                            bookin3: bookin3,
+                                                            bookout3: bookout3,
+                                                          ),
+                                                        ),
+                                                      );
                                                     },
                                                     child: const Row(
                                                         children: <Widget>[
@@ -679,5 +523,213 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+}
+
+class MyAlertDialog extends StatefulWidget {
+  var userapi;
+  var passapi;
+  var data;
+  var data1;
+  var data2;
+  var data3;
+  var data4;
+  var vidx4;
+  var bookin3;
+  var bookout3;
+
+  MyAlertDialog(
+      {super.key,
+      required this.userapi,
+      required this.passapi,
+      required this.data,
+      required this.data1,
+      required this.data2,
+      required this.data3,
+      required this.data4,
+      required this.vidx4,
+      required this.bookin3,
+      required this.bookout3});
+
+  @override
+  State<MyAlertDialog> createState() => _MyAlertDialogState(userapi, passapi,
+      data, data1, data2, data3, data4, vidx4, bookin3, bookout3);
+}
+
+class _MyAlertDialogState extends State<MyAlertDialog> {
+  _MyAlertDialogState(
+      this.userapi,
+      this.passapi,
+      this.data,
+      this.data1,
+      this.data2,
+      this.data3,
+      this.data4,
+      this.vidx4,
+      this.bookin3,
+      this.bookout3);
+
+  bool loading = false;
+
+  File? _image;
+  String titleImage = "Choose Image";
+  String titleCam = "Take Picture";
+
+  List data = [];
+  List data1 = [];
+  List data2 = [];
+  List data3 = [];
+  List data4 = [];
+  List data5 = [];
+  List data6 = [];
+  var hasilJson;
+  var vidx4;
+  var bookin3;
+  var bookout3;
+  var userapi;
+  var passapi;
+  var idreffbaru;
+
+  void _getCamera() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedImage != null && titleCam == "Take Picture") {
+        titleCam = pickedImage.path;
+        _image = File(pickedImage.path);
+      } else {
+        debugPrint('No image selected.');
+      }
+    });
+  }
+
+  void _getImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedImage != null && titleImage == "Choose Image") {
+        titleImage = pickedImage.path;
+        _image = File(pickedImage.path);
+      } else {
+        debugPrint('No image selected.');
+      }
+    });
+  }
+
+  void addImage(index) async {
+    String namaasli = data[0]['namaasli'];
+    String idreff = data4[index]['idx'];
+    String kategori = data4[index]['category'];
+    String base64Image = base64Encode(_image!.readAsBytesSync());
+    String filename = Path.basename(_image!.path);
+
+    final String soapEnvelope = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+        '<soap:Body>' +
+        '<File_Entry xmlns="http://tempuri.org/">' +
+        '<UsernameApi>$userapi</UsernameApi>' +
+        '<PasswordApi>$passapi</PasswordApi>' +
+        '<DESTINATION>BLJ</DESTINATION>' +
+        '<IDREFF>$idreff</IDREFF>' +
+        '<FILENAME>$filename</FILENAME>' +
+        '<FILEBYTE>$base64Image</FILEBYTE>' +
+        '<FILECAT>$kategori</FILECAT>' +
+        '<USERINSERT>$namaasli</USERINSERT>' +
+        '</File_Entry>' +
+        '</soap:Body>' +
+        '</soap:Envelope>';
+
+    final response = await http.post(Uri.parse(url_File_Entry),
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'SOAPAction': 'http://tempuri.org/File_Entry',
+          'Access-Control-Allow-Credentials': 'true',
+          'Content-type': 'text/xml; charset=utf-8'
+        },
+        body: soapEnvelope);
+
+    if (response.statusCode == 200) {
+      final responseBody = response.body;
+      final parsedResponse = xml.XmlDocument.parse(responseBody);
+      final result = parsedResponse.findAllElements('_x002D_').single.text;
+      debugPrint('Result: $result');
+      StatusAlert.show(context,
+          duration: const Duration(seconds: 1),
+          configuration:
+              const IconConfiguration(icon: Icons.done, color: Colors.green),
+          title: "Success",
+          backgroundColor: Colors.grey[300]);
+      setState(() {
+        loading = false;
+      });
+    } else {
+      debugPrint('Error: ${response.statusCode}');
+      StatusAlert.show(
+        context,
+        duration: const Duration(seconds: 1),
+        configuration:
+            const IconConfiguration(icon: Icons.error, color: Colors.red),
+        title: "Input Data5 Failed, ${response.statusCode}",
+        backgroundColor: Colors.grey[300],
+      );
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 1,
+            child: AlertDialog(
+              content: Stack(
+                children: <Widget>[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                        leading: const Icon(Icons.camera_alt),
+                        title: Text(titleCam),
+                        onTap: () async {
+                          _getCamera();
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.photo_library),
+                        title: Text(titleImage),
+                        onTap: () async {
+                          _getImage();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: const Text("Submit"),
+                  onPressed: () {
+                    addImage(index);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text("Close"),
+                  onPressed: () {
+                    titleImage = "Choose Image";
+                    titleCam = "Take Picture";
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.0)),
+            ),
+          );
+        });
   }
 }

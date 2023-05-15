@@ -124,16 +124,7 @@ class _LihatRatingState extends State<LihatRating> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () async {
             data7.clear();
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LihatDataEmployee(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-                data3: data3,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Rating"),

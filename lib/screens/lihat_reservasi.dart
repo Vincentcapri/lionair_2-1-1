@@ -458,15 +458,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             data3.clear();
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Reservation History"),

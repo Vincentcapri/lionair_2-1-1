@@ -57,15 +57,7 @@ class _UpdateEmailState extends State<UpdateEmail> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => UserProfile(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Update Email"),
