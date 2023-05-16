@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable, prefer_typing_uninitialized_variables, no_logic_in_create_state
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lionair_2/screens/uppass.dart';
 

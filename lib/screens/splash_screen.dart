@@ -24,15 +24,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
         color: Colors.red,
         child: Column(children: [
-          const SizedBox(
-            height: 200,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
           ),
           Image.asset(
             'assets/images/logo.png',
             color: Colors.white,
           ),
-          const SizedBox(
-            height: 250,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
           ),
           Padding(
             padding: const EdgeInsets.all(5.0),
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
               radius: 40.0,
               lineWidth: 5.0,
               percent: 1.0,
-              animationDuration: 900,
+              animationDuration: 600,
               center: const Text(
                 "loading",
                 style: TextStyle(
