@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lionair_2/providers/user_provider.dart';
+import 'package:lionair_2/screens/bottom_bar.dart';
 import 'package:lionair_2/screens/home_screen.dart';
 import 'package:lionair_2/screens/images.dart';
 import 'package:lionair_2/screens/input_laporan.dart';
@@ -9,7 +10,6 @@ import 'package:lionair_2/screens/profile.dart';
 import 'package:lionair_2/screens/reservasi_mess.dart';
 import 'package:lionair_2/screens/register.dart';
 import 'package:lionair_2/screens/splash_screen.dart';
-import 'package:lionair_2/screens/upemail.dart';
 import 'package:lionair_2/screens/uppass.dart';
 import 'package:lionair_2/screens/rating.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +40,14 @@ class MyApp extends StatelessWidget {
           'splash': (_) => const SplashScreen(),
           'login': (_) => const LoginScreen(),
           'register': (_) => const RegisterScreen(),
+          'bottom': (_) => BottomBar(
+                userapi: '',
+                passapi: '',
+                data: '',
+                data1: '',
+                data2: '',
+                data3: '',
+              ),
           'home': (_) => HomeScreen(
                 userapi: '',
                 passapi: '',
@@ -53,20 +61,23 @@ class MyApp extends StatelessWidget {
                 data: '',
                 data1: '',
                 data2: '',
+                data3: '',
               ),
-          'upemail': (_) => UpdateEmail(
-                userapi: '',
-                passapi: '',
-                data: '',
-                data1: '',
-                data2: '',
-              ),
+          // 'upemail': (_) => UpdateEmail(
+          //       userapi: '',
+          //       passapi: '',
+          //       data: '',
+          //       data1: '',
+          //       data2: '',
+          //       data3: '',
+          //     ),
           'uppass': (_) => UpdatePassword(
                 userapi: '',
                 passapi: '',
                 data: '',
                 data1: '',
                 data2: '',
+                data3: '',
               ),
           'reservasi_mess': (_) => ReservasiMess(
                 userapi: '',

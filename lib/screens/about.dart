@@ -4,30 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 
 class About extends StatefulWidget {
-  var userapi;
-  var passapi;
-  var data;
-  var data1;
-  var data2;
-
-  About({
-    super.key,
-    required this.userapi,
-    required this.passapi,
-    required this.data,
-    required this.data1,
-    required this.data2,
-  });
+  const About({super.key});
 
   @override
-  State<About> createState() =>
-      _AboutState(userapi, passapi, data, data1, data2);
+  State<About> createState() => _AboutState();
 }
 
 class _AboutState extends State<About> {
-  _AboutState(this.userapi, this.passapi, this.data, this.data1, this.data2);
-
   bool loading = false;
+
+  int curYear = DateTime.now().year;
 
   List data = [];
   List data1 = [];
@@ -60,6 +46,7 @@ class _AboutState extends State<About> {
   @override
   void initState() {
     super.initState();
+    curYear = DateTime.now().year;
     getAppVersion();
   }
 
@@ -105,11 +92,17 @@ class _AboutState extends State<About> {
             const SizedBox(
               height: 15,
             ),
-            Text(
-              "\u00A9 Copyright 2023",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).textScaleFactor * 15),
-            ),
+            curYear == 2023
+                ? Text(
+                    "\u00A9 Copyright 2023",
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).textScaleFactor * 15),
+                  )
+                : Text(
+                    "\u00A9 Copyright 2023 - $curYear",
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).textScaleFactor * 15),
+                  ),
           ],
         ),
       ),

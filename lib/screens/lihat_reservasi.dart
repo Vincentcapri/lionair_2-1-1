@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lionair_2/screens/rating.dart';
 import 'package:status_alert/status_alert.dart';
-import 'home_screen.dart';
 import 'laporan.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
-import 'reservasi_mess.dart';
 import 'package:clipboard/clipboard.dart';
 
 class LihatDataEmployee extends StatefulWidget {
@@ -367,6 +365,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                         TextButton(
                           child: const Text("Yes"),
                           onPressed: () {
+                            Navigator.of(context).pop();
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => LihatRating(
                                 userapi: userapi,
@@ -440,18 +439,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
     });
   }
 
-  void logout() {
-    setState(() {
-      data.clear();
-      data1.clear();
-      data2.clear();
-      data3.clear();
-      data4.clear();
-    });
-
-    Navigator.pushReplacementNamed(context, 'login');
-  }
-
   @override
   void initState() {
     super.initState();
@@ -466,21 +453,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            data3.clear();
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
-          },
-        ),
         title: const Text("Reservation History"),
         actions: <Widget>[
           IconButton(
@@ -511,7 +483,7 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
               ? const Center(child: CircularProgressIndicator())
               : data3.isEmpty
                   ? Container(
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.center,
                       child: const Text("No Data"),
                     )
                   : ListView.builder(
@@ -824,23 +796,6 @@ class _LihatDataEmployeeState extends State<LihatDataEmployee> {
                         );
                       },
                     ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ReservasiMess(
-              userapi: userapi,
-              passapi: passapi,
-              data: data,
-              data1: data1,
-              data2: data2,
-            ),
-          ));
-        },
-        backgroundColor: Colors.red,
-        elevation: 12,
-        tooltip: "Add Reservation",
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

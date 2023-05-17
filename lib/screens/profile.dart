@@ -4,14 +4,13 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lionair_2/screens/uppass.dart';
 
-import 'home_screen.dart';
-
 class UserProfile extends StatefulWidget {
   var userapi;
   var passapi;
   var data;
   var data1;
   var data2;
+  var data3;
 
   UserProfile({
     super.key,
@@ -20,16 +19,17 @@ class UserProfile extends StatefulWidget {
     required this.data,
     required this.data1,
     required this.data2,
+    required this.data3,
   });
 
   @override
   State<UserProfile> createState() =>
-      _UserProfileState(userapi, passapi, data, data1, data2);
+      _UserProfileState(userapi, passapi, data, data1, data2, data3);
 }
 
 class _UserProfileState extends State<UserProfile> {
-  _UserProfileState(
-      this.userapi, this.passapi, this.data, this.data1, this.data2);
+  _UserProfileState(this.userapi, this.passapi, this.data, this.data1,
+      this.data2, this.data3);
 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -38,6 +38,7 @@ class _UserProfileState extends State<UserProfile> {
   List data = [];
   List data1 = [];
   List data2 = [];
+  List data3 = [];
   var userapi;
   var passapi;
 
@@ -68,17 +69,7 @@ class _UserProfileState extends State<UserProfile> {
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(
-                    userapi: userapi,
-                    passapi: passapi,
-                    data: data,
-                    data1: data1,
-                    data2: data2),
-              ),
-            );
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("User Profile"),
@@ -237,13 +228,14 @@ class _UserProfileState extends State<UserProfile> {
                                       Future.delayed(const Duration(seconds: 1),
                                           () {
                                         Navigator.of(context)
-                                            .push(MaterialPageRoute(
+                                            .pushReplacement(MaterialPageRoute(
                                           builder: (context) => UpdatePassword(
                                             userapi: userapi,
                                             passapi: passapi,
                                             data: data,
                                             data1: data1,
                                             data2: data2,
+                                            data3: data3,
                                           ),
                                         ));
                                         setState(() {

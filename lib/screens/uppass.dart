@@ -14,6 +14,7 @@ class UpdatePassword extends StatefulWidget {
   var data;
   var data1;
   var data2;
+  var data3;
 
   UpdatePassword({
     super.key,
@@ -22,16 +23,17 @@ class UpdatePassword extends StatefulWidget {
     required this.data,
     required this.data1,
     required this.data2,
+    required this.data3,
   });
 
   @override
   State<UpdatePassword> createState() =>
-      _UpdatePasswordState(userapi, passapi, data, data1, data2);
+      _UpdatePasswordState(userapi, passapi, data, data1, data2, data3);
 }
 
 class _UpdatePasswordState extends State<UpdatePassword> {
-  _UpdatePasswordState(
-      this.userapi, this.passapi, this.data, this.data1, this.data2);
+  _UpdatePasswordState(this.userapi, this.passapi, this.data, this.data1,
+      this.data2, this.data3);
 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -40,6 +42,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   List data = [];
   List data1 = [];
   List data2 = [];
+  List data3 = [];
   var userapi;
   var passapi;
 
@@ -85,13 +88,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                 const IconConfiguration(icon: Icons.done, color: Colors.green),
             title: "Update Data Success",
             backgroundColor: Colors.grey[300]);
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => UserProfile(
-              userapi: userapi,
-              passapi: passapi,
-              data: data,
-              data1: data1,
-              data2: data2),
+            userapi: userapi,
+            passapi: passapi,
+            data: data,
+            data1: data1,
+            data2: data2,
+            data3: data3,
+          ),
         ));
         setState(() {
           loading = false;
@@ -137,7 +142,16 @@ class _UpdatePasswordState extends State<UpdatePassword> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => UserProfile(
+                userapi: userapi,
+                passapi: passapi,
+                data: data,
+                data1: data1,
+                data2: data2,
+                data3: data3,
+              ),
+            ));
           },
         ),
         title: const Text("Update Password"),

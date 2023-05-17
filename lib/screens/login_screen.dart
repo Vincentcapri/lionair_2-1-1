@@ -3,9 +3,9 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lionair_2/screens/bottom_bar.dart';
 import '../widgets/input_decoration.dart';
 import '../constants.dart';
-import '../screens/home_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 import 'package:xml/xml.dart' as xml;
@@ -203,6 +203,106 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  void getReserveHist(String destination, String idpegawai) async {
+    final temporaryList3 = [];
+    idpegawai = hasil_result[0]['idemployee'];
+
+    String objBody = '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+        '<soap:Body>' +
+        '<Checktime_GetHistoryStay xmlns="http://tempuri.org/">' +
+        '<UsernameAPI>$userapi</UsernameAPI>' +
+        '<PasswordAPI>$passapi</PasswordAPI>' +
+        '<Destination>BLJ</Destination>' +
+        '<IDSTAFF>$idpegawai</IDSTAFF>' +
+        '</Checktime_GetHistoryStay>' +
+        '</soap:Body>' +
+        '</soap:Envelope>';
+
+    final response = await http.post(Uri.parse(url_Checktime_GetHistoryStay),
+        headers: <String, String>{
+          "Access-Control-Allow-Origin": "*",
+          'SOAPAction': 'http://tempuri.org/Checktime_GetHistoryStay',
+          "Access-Control-Allow-Credentials": "true",
+          'Content-type': 'text/xml; charset=utf-8',
+        },
+        body: objBody);
+
+    if (response.statusCode == 200) {
+      final document = xml.XmlDocument.parse(response.body);
+
+      // debugPrint("=================");
+      // debugPrint(
+      //     "document.toXmlString : ${document.toXmlString(pretty: true, indent: '\t')}");
+      // debugPrint("=================");
+
+      final listResultAll3 = document.findAllElements('_x002D_');
+
+      for (final list_result in listResultAll3) {
+        final idx = list_result.findElements('IDX').first.text;
+        final docstate = list_result.findElements('DOCSTATE').first.text;
+        final idkamar = list_result.findElements('IDKAMAR').first.text;
+        final areamess = list_result.findElements('AREAMESS').first.text;
+        final blok = list_result.findElements('BLOK').first.text;
+        final nokamar = list_result.findElements('NOKAMAR').first.text;
+        final namabed = list_result.findElements('NAMABED').first.text;
+        final bookin = list_result.findElements('BOOKIN').first.text;
+        final bookout = list_result.findElements('BOOKOUT').first.text;
+        if (docstate == "VOID") {
+          temporaryList3.add({
+            'idx': idx,
+            'docstate': docstate,
+            'idkamar': idkamar,
+            'areamess': areamess,
+            'blok': blok,
+            'nokamar': nokamar,
+            'namabed': namabed,
+            'bookin': bookin,
+            'bookout': bookout,
+          });
+        } else {
+          final checkin = list_result.findElements('CHECKIN').first.text;
+          final checkout = list_result.findElements('CHECKOUT').first.text;
+          temporaryList3.add({
+            'idx': idx,
+            'docstate': docstate,
+            'idkamar': idkamar,
+            'areamess': areamess,
+            'blok': blok,
+            'nokamar': nokamar,
+            'namabed': namabed,
+            'bookin': bookin,
+            'bookout': bookout,
+            'checkin': checkin,
+            'checkout': checkout
+          });
+        }
+        debugPrint("object 3");
+        hasilJson = jsonEncode(temporaryList3);
+
+        debugPrint(hasilJson);
+        debugPrint("object_hasilJson 3");
+      }
+      setState(() {
+        loading = false;
+      });
+    } else {
+      debugPrint('Error: ${response.statusCode}');
+      StatusAlert.show(
+        context,
+        duration: const Duration(seconds: 1),
+        configuration:
+            const IconConfiguration(icon: Icons.error, color: Colors.red),
+        title: "Get Data3 Failed, ${response.statusCode}",
+        backgroundColor: Colors.grey[300],
+      );
+    }
+    setState(() {
+      hasil_result3 = temporaryList3;
+      loading = true;
+    });
+  }
+
   void getReservation(String destination, String idpegawai) async {
     final temporaryList2 = [];
 
@@ -277,12 +377,13 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(
+              builder: (context) => BottomBar(
                   userapi: userapi,
                   passapi: passapi,
                   data: hasil_result,
                   data1: hasil_result1,
-                  data2: hasil_result2),
+                  data2: hasil_result2,
+                  data3: hasil_result3),
             ),
           );
         }
@@ -475,6 +576,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       await Future.delayed(
                                           const Duration(seconds: 1), () {
                                         getData(
+                                            destination.text, idpegawai.text);
+                                      });
+                                      await Future.delayed(
+                                          const Duration(seconds: 1), () {
+                                        getReserveHist(
                                             destination.text, idpegawai.text);
                                       });
                                       await Future.delayed(
