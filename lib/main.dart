@@ -85,6 +85,7 @@ class MyApp extends StatelessWidget {
                 data: '',
                 data1: '',
                 data2: '',
+                data3: '',
               ),
           'lihat_reservasi': (_) => LihatDataEmployee(
                 userapi: '',

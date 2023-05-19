@@ -588,14 +588,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         getReservation(
                                             destination.text, idpegawai.text);
                                       });
-                                      Future.delayed(const Duration(seconds: 1),
-                                          () {
-                                        loading == true
-                                            ? setState(() {
-                                                loading = false;
-                                              })
-                                            : null;
-                                      });
+
                                       // _showNotification();
                                     },
                               child: Container(

@@ -247,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         data: data,
                                                         data1: data1,
                                                         data2: data2,
+                                                        data3: data3,
                                                       ),
                                                     ));
                                                     setState(() {

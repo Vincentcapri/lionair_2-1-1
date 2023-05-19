@@ -10,7 +10,6 @@ import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:http/http.dart' as http;
-import 'home_screen.dart';
 import 'input_laporan.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +57,8 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       this.vidx4,
       this.bookin3,
       this.bookout3);
+
+  int _currentIndex = 2;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -224,7 +225,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
       }
 
       Future.delayed(const Duration(seconds: 3), () {
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Lihatgambar(
             userapi: userapi,
             passapi: passapi,
@@ -287,15 +288,7 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
             vidx4 = '';
             bookin3 = '';
             bookout3 = '';
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                userapi: userapi,
-                passapi: passapi,
-                data: data,
-                data1: data1,
-                data2: data2,
-              ),
-            ));
+            Navigator.of(context).pop();
           },
         ),
         title: const Text("Complaint"),
@@ -569,6 +562,37 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
         elevation: 12,
         tooltip: "Add Report",
         child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.shifting,
+        unselectedIconTheme: const IconThemeData(color: Colors.grey),
+        selectedFontSize: 20,
+        selectedItemColor: Colors.red,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.pending_actions),
+            label: 'Pending',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long),
+            label: 'Current',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+        ],
       ),
     );
   }

@@ -152,13 +152,6 @@ class _PendingScreenState extends State<PendingScreen> {
   }
 
   @override
-  void dispose() {
-    idpegawai.dispose();
-    destination.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -193,24 +186,15 @@ class _PendingScreenState extends State<PendingScreen> {
               key: _formKey,
               itemCount: 1,
               itemBuilder: (context, index) {
-                return data1.isEmpty
-                    ? Container(
-                        height: size.height * 0.785,
-                        alignment: Alignment.center,
-                        child: loading
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                "No Data",
-                              ),
-                      )
-                    : Center(
+                return data1.isNotEmpty
+                    ? Center(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Column(
                             children: <Widget>[
                               Text("Total Pending : ${data1.length}"),
                               SizedBox(
-                                width: size.width * 0.9,
+                                width: size.width * 0.98,
                                 height: size.height * 0.75,
                                 child: loading
                                     ? const CircularProgressIndicator()
@@ -262,6 +246,9 @@ class _PendingScreenState extends State<PendingScreen> {
                                                                     .bold),
                                                       ),
                                                     ]),
+                                                  ),
+                                                  const Divider(
+                                                    thickness: 2,
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
@@ -384,6 +371,15 @@ class _PendingScreenState extends State<PendingScreen> {
                             ],
                           ),
                         ),
+                      )
+                    : Container(
+                        height: size.height * 0.785,
+                        alignment: Alignment.center,
+                        child: loading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                "No Data",
+                              ),
                       );
               },
             ),

@@ -5,12 +5,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import "dart:async";
 import "package:intl/intl.dart";
-import 'package:lionair_2/screens/home_screen.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:xml2json/xml2json.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
+
+import 'bottom_bar.dart';
 
 class ReservasiMess extends StatefulWidget {
   var userapi;
@@ -18,6 +19,7 @@ class ReservasiMess extends StatefulWidget {
   var data;
   var data1;
   var data2;
+  var data3;
 
   ReservasiMess(
       {super.key,
@@ -25,16 +27,17 @@ class ReservasiMess extends StatefulWidget {
       required this.passapi,
       required this.data,
       required this.data1,
-      required this.data2});
+      required this.data2,
+      required this.data3});
 
   @override
   State<ReservasiMess> createState() =>
-      _ReservasiMessState(userapi, passapi, data, data1, data2);
+      _ReservasiMessState(userapi, passapi, data, data1, data2, data3);
 }
 
 class _ReservasiMessState extends State<ReservasiMess> {
-  _ReservasiMessState(
-      this.userapi, this.passapi, this.data, this.data1, this.data2);
+  _ReservasiMessState(this.userapi, this.passapi, this.data, this.data1,
+      this.data2, this.data3);
 
   final _formKey = GlobalKey<FormState>();
   var loading = false;
@@ -42,6 +45,7 @@ class _ReservasiMessState extends State<ReservasiMess> {
   List data = [];
   List data1 = [];
   List data2 = [];
+  List data3 = [];
   List dataBaru1 = [];
   Xml2Json xml2json = Xml2Json();
   var hasilJson;
@@ -210,14 +214,18 @@ class _ReservasiMessState extends State<ReservasiMess> {
                 const IconConfiguration(icon: Icons.done, color: Colors.green),
             title: "Input Data Success",
             backgroundColor: Colors.grey[300]);
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HomeScreen(
-              userapi: userapi,
-              passapi: passapi,
-              data: data,
-              data1: data1,
-              data2: data2),
-        ));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BottomBar(
+                  userapi: userapi,
+                  passapi: passapi,
+                  data: data,
+                  data1: data1,
+                  data2: data2,
+                  data3: data3),
+            ),
+            (route) => false);
         setState(() {
           loading = false;
         });

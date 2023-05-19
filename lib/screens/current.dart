@@ -450,7 +450,7 @@ class _CurrentScreenState extends State<CurrentScreen> {
                             children: <Widget>[
                               Text("Total Current : ${data2.length}"),
                               SizedBox(
-                                width: size.width * 0.9,
+                                width: size.width * 0.98,
                                 height: size.height * 0.75,
                                 child: loading
                                     ? const CircularProgressIndicator()

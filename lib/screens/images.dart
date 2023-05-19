@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:lionair_2/screens/laporan.dart';
 import 'package:status_alert/status_alert.dart';
 import '../constants.dart';
 import 'package:xml/xml.dart' as xml;
@@ -55,6 +56,8 @@ class _Lihatgambarstate extends State<Lihatgambar> {
       this.vidx4,
       this.bookin3,
       this.bookout3);
+
+  int _currentIndex = 2;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -224,30 +227,24 @@ class _Lihatgambarstate extends State<Lihatgambar> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
+                actions: [
+                  TextButton(
+                    child: const Text("Close"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
                 content: Stack(
-                  clipBehavior: Clip.none,
                   children: <Widget>[
-                    Positioned(
-                      right: -40.0,
-                      top: -40.0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.red,
-                          child: Icon(Icons.close),
-                        ),
-                      ),
-                    ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(1),
                           child: SizedBox(
-                            width: 280,
-                            height: 360,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            height: MediaQuery.of(context).size.height * 0.55,
                             child: Image.memory(
                                 base64Decode("${data6[0]['filebyte']}")),
                           ),
@@ -293,7 +290,20 @@ class _Lihatgambarstate extends State<Lihatgambar> {
             data5.clear();
             idreff5 = '';
             data6.clear();
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => Lihatlaporan(
+                userapi: userapi,
+                passapi: passapi,
+                data: data,
+                data1: data1,
+                data2: data2,
+                data3: data3,
+                data4: data4,
+                vidx4: vidx4,
+                bookin3: bookin3,
+                bookout3: bookout3,
+              ),
+            ));
           },
         ),
         title: const Text("Attachment"),
@@ -334,23 +344,21 @@ class _Lihatgambarstate extends State<Lihatgambar> {
                             alignment: Alignment.center,
                             margin: const EdgeInsets.all(10),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Center(
-                                  child: loading1
-                                      ? const CircularProgressIndicator()
-                                      : IconButton(
-                                          onPressed: loading1
-                                              ? null
-                                              : () async {
-                                                  setState(() {
-                                                    loading1 = true;
-                                                  });
-                                                  getImage(idfile.text, index);
-                                                },
-                                          icon: const Icon(Icons.zoom_in)),
-                                ),
-                                Center(
-                                    child: Text("${data5[index]['filename']}"))
+                                loading1
+                                    ? const CircularProgressIndicator()
+                                    : IconButton(
+                                        onPressed: loading1
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  loading1 = true;
+                                                });
+                                                getImage(idfile.text, index);
+                                              },
+                                        icon: const Icon(Icons.zoom_in)),
+                                Text("${data5[index]['filename']}")
                               ],
                             ),
                           ),
@@ -359,6 +367,37 @@ class _Lihatgambarstate extends State<Lihatgambar> {
                     );
                   },
                 ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.shifting,
+        unselectedIconTheme: const IconThemeData(color: Colors.grey),
+        selectedFontSize: 20,
+        selectedItemColor: Colors.red,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.pending_actions),
+            label: 'Pending',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long),
+            label: 'Current',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+        ],
+      ),
     );
   }
 }
