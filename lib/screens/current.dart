@@ -800,7 +800,13 @@ class _CurrentScreenState extends State<CurrentScreen> {
                                                                           .redAccent,
                                                                 ),
                                                                 child: loading2
-                                                                    ? const CircularProgressIndicator()
+                                                                    ? const SizedBox(
+                                                                        height:
+                                                                            20,
+                                                                        width:
+                                                                            22,
+                                                                        child:
+                                                                            CircularProgressIndicator())
                                                                     : Text(
                                                                         "OTP",
                                                                         style: TextStyle(

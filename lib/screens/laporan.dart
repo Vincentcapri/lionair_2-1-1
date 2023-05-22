@@ -482,21 +482,23 @@ class _Lihatlaporanstate extends State<Lihatlaporan> {
                                                             ),
                                                           );
                                                         },
-                                                        child: const Row(
+                                                        child: Row(
                                                             children: <Widget>[
                                                               Icon(
                                                                 Icons
                                                                     .photo_library,
-                                                                color:
-                                                                    Colors.grey,
+                                                                color: Colors
+                                                                        .lightBlue[
+                                                                    300],
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   width: 5),
                                                               Text(
                                                                 "Choose Image",
                                                                 style: TextStyle(
                                                                     color: Colors
-                                                                        .grey),
+                                                                            .lightBlue[
+                                                                        300]),
                                                               ),
                                                             ]),
                                                       ),
